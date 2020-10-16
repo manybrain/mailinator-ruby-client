@@ -49,7 +49,7 @@ module MailinatorClient
     # *  Collection of messages (https://manybrain.github.io/m8rdocs/#fetch-inbox-aka-fetch-message-summaries)
     def fetch_inbox(params = {})
       params = Utils.symbolize_hash_keys(params)
-      query_params = { skip: 0, limit: 50, sort: "acending", decodeSubject: false }
+      query_params = { skip: 0, limit: 50, sort: "ascending", decodeSubject: false }
       headers = {}
       body = nil
 
