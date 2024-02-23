@@ -24,27 +24,32 @@ require "json"
 
 module MailinatorClient
 
-  # Class containing all the actions for the Domains Resource
-  class Domains
+  # Class containing all the actions for the Authenticators Resource
+  class Authenticators
 
     def initialize(client)
       @client = client
     end
 
-    # Fetches a list of all your domains.
+    # Instant TOTP 2FA code
     #
     # Authentication:
     # The client must be configured with a valid api
     # access token to call this action.
     #
+    # Parameters:
+    # *  {string} totpSecretKey - totp secret key
+    #
     # Responses:
-    # *  Collection of domains (https://manybrain.github.io/m8rdocs/#get-usage-statistica)
-    def get_domains()
+    # *  Instant TOTP 2FA Code info (https://manybrain.github.io/m8rdocs/#instant-totp-2fa-code)
+    def instant_totp_2fa_code(params = {})
       query_params = {}
       headers = {}
       body = nil
 
-      path = "/domains"
+      raise ArgumentError.new("totpSecretKey is required") unless params.has_key?(:totpSecretKey)
+
+      path = "/totp/#{params[:totpSecretKey]}"
 
       response = @client.request(
         method: :get,
@@ -54,28 +59,73 @@ module MailinatorClient
         body: body)
     end
 
-    # Fetches a specific domain
+    # Fetch Authenticators
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Responses:
+    # *  Collection of passcodes (https://manybrain.github.io/m8rdocs/#fetch-authenticators)
+    def get_authenticators()
+      query_params = {}
+      headers = {}
+      body = nil
+
+      path = "/authenticators"
+
+      response = @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+    
+    # Fetch the TOTP 2FA code from one of your saved Keys
     #
     # Authentication:
     # The client must be configured with a valid api
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} id - authenticator id
     #
     # Responses:
-    # *  Domain (https://manybrain.github.io/m8rdocs/#get-domain)
-    def get_domain(params = {})
-      params = Utils.symbolize_hash_keys(params)
-      query_params = { }
+    # *  Authenticator (https://manybrain.github.io/m8rdocs/#fetch-authenticators-by-id)
+    def get_authenticators_by_id(params = {})
+      query_params = {}
       headers = {}
       body = nil
 
-      raise ArgumentError.new("domain id is required") unless params.has_key?(:domainId)
+      raise ArgumentError.new("id is required") unless params.has_key?(:id)
 
-      path = "/domains/#{params[:domainId]}"
+      path = "/authenticators/#{params[:id]}"
 
-      @client.request(
+      response = @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+    
+    # Fetch Authenticator
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Responses:
+    # *  Collection of passcodes (https://manybrain.github.io/m8rdocs/#fetch-authenticator)
+    def get_authenticator()
+      query_params = {}
+      headers = {}
+      body = nil
+
+      path = "/authenticator"
+
+      response = @client.request(
         method: :get,
         path: path,
         query: query_params,
@@ -83,64 +133,33 @@ module MailinatorClient
         body: body)
     end
 
-    # This endpoint creates a private domain attached to your account. 
-    # Note, the domain must be unique to the system and you must have not reached your maximum number of Private Domains.
+    # Fetch Authenticator By Id
     #
     # Authentication:
     # The client must be configured with a valid api
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name
+    # *  {string} id - authenticator id
     #
     # Responses:
-    # *  Status (https://manybrain.github.io/m8rdocs/#create-domain)
-    def create_domain(params = {})
-      params = Utils.symbolize_hash_keys(params)
-      query_params = { }
+    # *  Authenticator (https://manybrain.github.io/m8rdocs/#fetch-authenticator-by-id)
+    def get_authenticator_by_id(params = {})
+      query_params = {}
       headers = {}
       body = nil
 
-      raise ArgumentError.new("domain id is required") unless params.has_key?(:domainId)
+      raise ArgumentError.new("id is required") unless params.has_key?(:id)
 
-      path = "/domains/#{params[:domainId]}"
+      path = "/authenticator/#{params[:id]}"
 
-      @client.request(
-        method: :post,
+      response = @client.request(
+        method: :get,
         path: path,
         query: query_params,
         headers: headers,
         body: body)
     end
-
-    # This endpoint deletes a Private Domain
-    #
-    # Authentication:
-    # The client must be configured with a valid api
-    # access token to call this action.
-    #
-    # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
-    #
-    # Responses:
-    # *  Status (https://manybrain.github.io/m8rdocs/#delete-domain)
-    def delete_domain(params = {})
-      params = Utils.symbolize_hash_keys(params)
-      query_params = { }
-      headers = {}
-      body = nil
-
-      raise ArgumentError.new("domain id is required") unless params.has_key?(:domainId)
-
-      path = "/domains/#{params[:domainId]}"
-
-      @client.request(
-        method: :delete,
-        path: path,
-        query: query_params,
-        headers: headers,
-        body: body)
-    end
-
+    
   end
 end

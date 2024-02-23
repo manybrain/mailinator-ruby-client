@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2020 Manybrain, Inc.
+# Copyright (c) 2024 Manybrain, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,12 @@
 require_relative "mailinator_client/version"
 require_relative "mailinator_client/error"
 require_relative "mailinator_client/utils"
+require_relative "mailinator_client/authenticators"
 require_relative "mailinator_client/domains"
 require_relative "mailinator_client/stats"
 require_relative "mailinator_client/messages"
 require_relative "mailinator_client/rules"
+require_relative "mailinator_client/webhooks"
 require_relative "mailinator_client/client"
 
 module MailinatorClient

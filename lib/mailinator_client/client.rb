@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2020 Manybrain, Inc.
+# Copyright (c) 2024 Manybrain, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 require "httparty"
 
 module MailinatorClient
+  require_relative 'version'
   # Mailinator API
   #
   # User API for accessing Mailinator data
@@ -31,7 +32,11 @@ module MailinatorClient
 
     def initialize(options = {})
       @auth_token = options.fetch(:auth_token, nil)
-      @url        = "https://mailinator.com/api/v2"
+      @url        = "https://api.mailinator.com/api/v2"
+    end
+
+    def authenticators
+      @authenticators ||= Authenticators.new(self)
     end
 
     def domains
@@ -50,12 +55,17 @@ module MailinatorClient
       @rules ||= Rules.new(self)
     end
 
+    def webhooks
+      @webhooks ||= Webhooks.new(self)
+    end
+
     def request(options = {})
       headers = options.fetch(:headers, {})
       method  = options.fetch(:method, :get)
 
       headers["Accept"]         = "application/json"
       headers["Content-Type"]   = "application/json"
+      headers["User-Agent"]   = "Mailinator SDK - Ruby V#{MailinatorClient::VERSION}"
       headers["Authorization"]  = @auth_token if @auth_token
       path = @url + options.fetch(:path, "")
 

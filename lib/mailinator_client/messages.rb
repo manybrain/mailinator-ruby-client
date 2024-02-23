@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2020 Manybrain, Inc.
+# Copyright (c) 2024 Manybrain, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -71,7 +71,7 @@ module MailinatorClient
         body: body)
     end
 
-    # Retrieves a specific message by id.
+    # Retrieves a specific message by id for specific inbox.
     #
     # Authentication:
     # The client must be configured with a valid api
@@ -83,8 +83,8 @@ module MailinatorClient
     # *  {string} messageId - The Message id
     #
     # Responses:
-    # *  Message (https://manybrain.github.io/m8rdocs/#fetch-message)
-    def fetch_message(params = {})
+    # *  Message (https://manybrain.github.io/m8rdocs/#fetch-inbox-message)
+    def fetch_inbox_message(params = {})
       params = Utils.symbolize_hash_keys(params)
       query_params = { }
       headers = {}
@@ -104,6 +104,37 @@ module MailinatorClient
         body: body)
     end
 
+    # Retrieves a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message (https://manybrain.github.io/m8rdocs/#fetch-message)
+    def fetch_message(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
     # Retrieves a specific SMS message by sms number.
     #
     # Authentication:
@@ -112,7 +143,6 @@ module MailinatorClient
     #
     # Parameters:
     # *  {string} domainId - The Domain name or the Domain id
-    # *  {string} inbox - The Inbox name
     # *  {string} teamSmsNumber - The Team sms number
     #
     # Responses:
@@ -124,10 +154,9 @@ module MailinatorClient
       body = nil
 
       raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
-      raise ArgumentError.new("inbox is required") unless params.has_key?(:inbox)
       raise ArgumentError.new("team sms number is required") unless params.has_key?(:teamSmsNumber)
 
-      path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}/#{params[:teamSmsNumber]}"
+      path = "/domains/#{params[:domain]}/inboxes/#{params[:teamSmsNumber]}"
 
       @client.request(
         method: :get,
@@ -137,7 +166,7 @@ module MailinatorClient
         body: body)
     end
 
-    # Retrieves a list of attachments for a message. Note attachments are expected to be in Email format.
+    # Retrieves a list of attachments for a message for specific inbox. Note attachments are expected to be in Email format.
     #
     # Authentication:
     # The client must be configured with a valid api
@@ -149,8 +178,8 @@ module MailinatorClient
     # *  {string} messageId - The Message id
     #
     # Responses:
-    # *  Collection of attachments (https://manybrain.github.io/m8rdocs/#fetch-list-of-attachments)
-    def fetch_attachments(params = {})
+    # *  Collection of attachments (https://manybrain.github.io/m8rdocs/#fetch-inbox-message-list-of-attachments)
+    def fetch_inbox_message_attachments(params = {})
       params = Utils.symbolize_hash_keys(params)
       query_params = { }
       headers = {}
@@ -170,8 +199,38 @@ module MailinatorClient
         body: body)
     end
 
+    # Retrieves a list of attachments for a message. Note attachments are expected to be in Email format.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Collection of attachments (https://manybrain.github.io/m8rdocs/#fetch-list-of-attachments)
+    def fetch_message_attachments(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
 
-    # Retrieves a specific attachment.
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/attachments"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves a specific attachment for specific inbox.
     #
     # Authentication:
     # The client must be configured with a valid api
@@ -184,8 +243,8 @@ module MailinatorClient
     # *  {string} attachmentId - The Attachment id
     #
     # Responses:
-    # *  Attachment (https://manybrain.github.io/m8rdocs/#fetch-attachment)
-    def fetch_attachment(params = {})
+    # *  Attachment (https://manybrain.github.io/m8rdocs/#fetch-inbox-message-attachment)
+    def fetch_inbox_message_attachment(params = {})
       params = Utils.symbolize_hash_keys(params)
       query_params = { }
       headers = {}
@@ -206,7 +265,71 @@ module MailinatorClient
         body: body)
     end
 
+    # Retrieves a specific attachment.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} messageId - The Message id
+    # *  {string} attachmentId - The Attachment id
+    #
+    # Responses:
+    # *  Attachment (https://manybrain.github.io/m8rdocs/#fetch-attachment)
+    def fetch_message_attachment(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+      raise ArgumentError.new("attachment id is required") unless params.has_key?(:attachmentId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/attachments/#{params[:attachmentId]}"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
     # Retrieves all links found within a given email.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Collection of links (https://manybrain.github.io/m8rdocs/#fetch-links)
+    def fetch_message_links(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/links"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves all links found within a given email for specific inbox.
     #
     # Authentication:
     # The client must be configured with a valid api
@@ -218,8 +341,8 @@ module MailinatorClient
     # *  {string} messageId - The Message id
     #
     # Responses:
-    # *  Collection of links (https://manybrain.github.io/m8rdocs/#fetch-links)
-    def fetch_message_links(params = {})
+    # *  Collection of links (https://manybrain.github.io/m8rdocs/#fetch-inbox-message-links)
+    def fetch_inbox_message_links(params = {})
       params = Utils.symbolize_hash_keys(params)
       query_params = { }
       headers = {}
@@ -344,8 +467,8 @@ module MailinatorClient
     # *  {string} messageToPost - The Message object (https://manybrain.github.io/m8rdocs/#inject-a-message-http-post-messages)
     #
     # Responses:
-    # *  Status, Id and RulesToFired info (https://manybrain.github.io/m8rdocs/#fetch-an-sms-messages)
-    def inject_message(params = {})
+    # *  Status, Id and RulesToFired info (https://manybrain.github.io/m8rdocs/#post-message)
+    def post_message(params = {})
       params = Utils.symbolize_hash_keys(params)
       query_params = { }
       headers = {}
@@ -367,5 +490,193 @@ module MailinatorClient
         body: body)
     end
 
+    # Retrieves all smtp log found within a given email.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Collection of smtp logs (https://manybrain.github.io/m8rdocs/#fetch-message-smtp-log)
+    def fetch_message_smtp_log(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/smtplog"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves all smtp log found within a given email for specific inbox.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} inbox - The Inbox name
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Collection of smtp log (https://manybrain.github.io/m8rdocs/#fetch-inbox-message-smtp-log)
+    def fetch_inbox_message_smtp_log(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("inbox is required") unless params.has_key?(:inbox)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}/messages/#{params[:messageId]}/smtplog"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves all raw data found within a given email.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Raw Data (https://manybrain.github.io/m8rdocs/#fetch-message-raw)
+    def fetch_message_raw(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/raw"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves all raw data found within a given email for specific inbox.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} inbox - The Inbox name
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Raw Data (https://manybrain.github.io/m8rdocs/#fetch-inbox-message-raw)
+    def fetch_inbox_message_raw(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("inbox is required") unless params.has_key?(:inbox)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}/messages/#{params[:messageId]}/raw"
+      
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # That fetches the latest 5 FULL messages.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    #
+    # Responses:
+    # *  Collection of latest messages (https://manybrain.github.io/m8rdocs/#fetch-latest-messages)
+    def fetch_latest_messages(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+
+      path = "/domains/#{params[:domain]}/messages/*"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # That fetches the latest 5 FULL messages for specific inbox.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} inbox - The Inbox name
+    #
+    # Responses:
+    # *  Collection of latest messages (https://manybrain.github.io/m8rdocs/#fetch-latest-inbox-messages)
+    def fetch_latest_inbox_messages(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("inbox is required") unless params.has_key?(:inbox)
+
+      path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}/messages/*"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+    
   end
 end

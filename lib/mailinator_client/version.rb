@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2020 Manybrain, Inc.
+# Copyright (c) 2024 Manybrain, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,5 +21,5 @@
 # SOFTWARE.
 
 module MailinatorClient
-  VERSION = "1.0.3"
+  VERSION = "1.0.4"
 end

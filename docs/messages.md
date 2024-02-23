@@ -5,15 +5,25 @@ Details on the various actions that can be performed on the Messages resource, i
 ##### Contents
 
 *   [FetchInbox](#fetchinbox)
+*   [FetchInboxMessage](#fetchinboxmessage)
 *   [FetchMessage](#fetchmessage)
 *   [FetchSMSMessage](#fetchsmsmessage)
-*   [FetchAttachments](#fetchattachments)
-*   [FetchAttachment](#fetchattachment)
+*   [FetchInboxMessageAttachments](#fetchinboxmessageattachments)
+*   [FetchMessageAttachments](#fetchmessageattachments)
+*   [FetchInboxMessageAttachment](#fetchinboxmessageattachment)
+*   [FetchMessageAttachment](#fetchmessageattachment)
 *   [FetchMessageLinks](#fetchmessagelinks)
+*   [FetchInboxMessageLinks](#fetchinboxmessagelinks)
 *   [DeleteAllDomainMessages](#deletealldomainmessages)
 *   [DeleteAllInboxMessages](#deleteallinboxmessages)
 *   [DeleteMessage](#deletemessage)
-*   [InjectMessage](#injectmessage)
+*   [PostMessage](#postmessage)
+*   [FetchMessageSmtpLog](#fetchmessagesmtplog)
+*   [FetchInboxMessageSmtpLog](#fetchinboxmessagesmtplog)
+*   [FetchMessageRaw](#fetchmessageraw)
+*   [FetchInboxMessageRaw](#fetchinboxmessageraw)
+*   [FetchLatestMessages](#fetchlatestmessages)
+*   [FetchLatestInboxMessages](#fetchlatestinboxmessages)
 
 <br/>
 
@@ -35,12 +45,12 @@ puts result
 
 <br/>
 
-## FetchMessage
+## FetchInboxMessage
 
-Retrieves a specific message by id
+Retrieves a specific message by id for specific inbox
 
 ```ruby
-result = client.messages.fetch_inbox(
+result = client.messages.fetch_inbox_message(
   domainId: my_domain_id
   inbox: my_inbox
   messageId: my_message_id)
@@ -50,6 +60,19 @@ puts result
 
 <br/>
 
+## FetchMessage
+
+Retrieves a specific message by id
+
+```ruby
+result = client.messages.fetch_message(
+  domainId: my_domain_id
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
 
 ## FetchSMSMessage
 
@@ -67,12 +90,12 @@ puts result
 <br/>
 
 
-## FetchAttachments
+## FetchInboxMessageAttachments
 
-Retrieves a list of attachments for a message
+Retrieves a list of attachments for a message for specific inbox
 
 ```ruby
-result = client.messages.fetch_attachments(
+result = client.messages.fetch_inbox_message_attachments(
   domainId: my_domain_id
   inbox: my_inbox
   messageId: my_message_id)
@@ -82,15 +105,44 @@ puts result
 
 <br/>
 
+## FetchMessageAttachments
 
-## FetchAttachment
+Retrieves a list of attachments for a message
+
+```ruby
+result = client.messages.fetch_message_attachments(
+  domainId: my_domain_id
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
+
+
+## FetchInboxMessageAttachment
+
+Retrieves a specific attachment for specific inbox
+
+```ruby
+result = client.messages.fetch_inbox_message_attachment(
+  domainId: my_domain_id
+  inbox: my_inbox
+  messageId: my_message_id
+  attachmentId: my_attachment_id)
+
+puts result
+```
+
+<br/>
+
+## FetchMessageAttachment
 
 Retrieves a specific attachment
 
 ```ruby
-result = client.messages.fetch_attachment(
+result = client.messages.fetch_message_attachment(
   domainId: my_domain_id
-  inbox: my_inbox
   messageId: my_message_id
   attachmentId: my_attachment_id)
 
@@ -106,6 +158,20 @@ Retrieves all links found within a given email
 
 ```ruby
 result = client.messages.fetch_message_links(
+  domainId: my_domain_id
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
+
+## FetchInboxMessageLinks
+
+Retrieves all links found within a given email for specific inbox
+
+```ruby
+result = client.messages.fetch_inbox_message_links(
   domainId: my_domain_id
   inbox: my_inbox
   messageId: my_message_id)
@@ -162,15 +228,105 @@ puts result
 <br/>
 
 
-## InjectMessage
+## PostMessage
 
 Deliver a JSON message into your private domain
 
 ```ruby
-result = client.messages.inject_message(
+result = client.messages.post_message(
   domainId: my_domain_id
   inbox: my_inbox
   messageToPost: my_message_to_post)
+
+puts result
+```
+
+<br/>
+
+
+## FetchMessageSmtpLog
+
+Retrieves all smtp log found within a given email
+
+```ruby
+result = client.messages.fetch_message_smtp_log(
+  domainId: my_domain_id
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
+
+## FetchInboxMessageSmtpLog
+
+Retrieves all smtp log found within a given email for specific inbox
+
+```ruby
+result = client.messages.fetch_inbox_message_smtp_log(
+  domainId: my_domain_id
+  inbox: my_inbox
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
+
+
+## FetchMessageRaw
+
+Retrieves all raw data found within a given email
+
+```ruby
+result = client.messages.fetch_message_raw(
+  domainId: my_domain_id
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
+
+## FetchInboxMessageLinks
+
+Retrieves all raw data found within a given email for specific inbox
+
+```ruby
+result = client.messages.fetch_inbox_message_raw(
+  domainId: my_domain_id
+  inbox: my_inbox
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
+
+
+## FetchLatestMessages
+
+That fetches the latest 5 FULL messages
+
+```ruby
+result = client.messages.fetch_latest_messages(
+  domainId: my_domain_id
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
+
+## FetchLatestInboxMessages
+
+That fetches the latest 5 FULL messages for specific inbox
+
+```ruby
+result = client.messages.fetch_latest_inbox_messages(
+  domainId: my_domain_id
+  inbox: my_inbox
+  messageId: my_message_id)
 
 puts result
 ```

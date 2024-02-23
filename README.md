@@ -45,6 +45,9 @@ The ``Client()`` initializer takes the following arguments:
 
 Each of the following is a method on the client object, and returns a wrapper for the actions against that particular resource. See each resource documentation file for more information.
 
+* [authenticators](docs/authenticators.md)  
+  Contains all of the actions that can be performed against the set of [Authenticators](https://manybrain.github.io/m8rdocs/#authenticators-api) that the currently authenticated user has access to - such as listing the authenticators.
+
 * [domains](docs/domains.md)  
   Contains all of the actions that can be performed against the set of [Domains](https://manybrain.github.io/m8rdocs/#domains-api) that the currently authenticated user has access to - such as listing the domains.
 
@@ -56,6 +59,9 @@ Each of the following is a method on the client object, and returns a wrapper fo
 
 * [messages](docs/messages.md)  
   Contains all of the actions that can be performed against the set of [Messages](https://manybrain.github.io/m8rdocs/#message-api) that the currently authenticated user has access to - such as listing the messages or injecting a new message.
+  
+* [webhooks](docs/webhooks.md)  
+  Contains all of the actions that can be performed against the set of [Webhooks](https://manybrain.github.io/m8rdocs/#webhooks-api) that the currently user has access to - such as listing the webhooks.
 
 <br/>
 
@@ -92,10 +98,16 @@ Most of the tests require env variables with valid values. Visit tests source co
 * `MAILINATOR_TEST_MESSAGE_WITH_ATTACHMENT_ID` - existing message id within inbox (see above) within private domain (see above); see also https://manybrain.github.io/m8rdocs/#fetch-message
 * `MAILINATOR_TEST_ATTACHMENT_ID` - existing message id within inbox (see above) within private domain (see above); see also https://manybrain.github.io/m8rdocs/#fetch-message
 * `MAILINATOR_TEST_DELETE_DOMAIN` - don't use it unless you are 100% sure what you are doing
+* `MAILINATOR_TEST_WEBHOOKTOKEN_PRIVATEDOMAIN` - private domain for webhook token
+* `MAILINATOR_TEST_WEBHOOKTOKEN_CUSTOMSERVICE` - custom service for webhook token
+* `MAILINATOR_TEST_AUTH_SECRET` - authenticator secret
+* `MAILINATOR_TEST_AUTH_ID` - authenticator id
+* `MAILINATOR_TEST_WEBHOOK_INBOX` - inbox for webhook
+* `MAILINATOR_TEST_WEBHOOK_CUSTOMSERVICE` - custom service for webhook
 
 
 *****
 
-Copyright (c) 2020 Manybrain, Inc
+Copyright (c) 2024 Manybrain, Inc
 
 <https://www.mailinator.com/>
