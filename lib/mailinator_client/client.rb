@@ -72,7 +72,9 @@ module MailinatorClient
       response = HTTParty.send(method, path,
         query: Utils.fix_query_arrays(options[:query]),
         body: options[:body] && options[:body].to_json(),
-        headers: headers)
+        headers: headers,
+        timeout: 125
+      )
 
       result = response.parsed_response
       if response.code >= 400

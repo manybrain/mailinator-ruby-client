@@ -12,6 +12,7 @@ Details on the various actions that can be performed on the Messages resource, i
 *   [FetchMessageAttachments](#fetchmessageattachments)
 *   [FetchInboxMessageAttachment](#fetchinboxmessageattachment)
 *   [FetchMessageAttachment](#fetchmessageattachment)
+*   [FetchMessageLinksFull](#fetchmessagelinksfull)
 *   [FetchMessageLinks](#fetchmessagelinks)
 *   [FetchInboxMessageLinks](#fetchinboxmessagelinks)
 *   [DeleteAllDomainMessages](#deletealldomainmessages)
@@ -38,7 +39,11 @@ result = client.messages.fetch_inbox(
   skip: my_skip
   limit: my_limit
   sort: my_sort
-  decodeSubject: my_decode_subject)
+  decodeSubject: my_decode_subject,
+  cursor: my_cursor,
+  full: my_full,
+  delete: my_delete,
+  wait: my_wait)
 
 puts result
 ```
@@ -67,7 +72,8 @@ Retrieves a specific message by id
 ```ruby
 result = client.messages.fetch_message(
   domainId: my_domain_id
-  messageId: my_message_id)
+  messageId: my_message_id,
+  delete: my_delete)
 
 puts result
 ```
@@ -151,6 +157,19 @@ puts result
 
 <br/>
 
+## FetchMessageLinksFull
+
+Retrieves all links full found within a given email
+
+```ruby
+result = client.messages.fetch_message_links_full(
+  domainId: my_domain_id
+  messageId: my_message_id)
+
+puts result
+```
+
+<br/>
 
 ## FetchMessageLinks
 

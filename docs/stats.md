@@ -4,8 +4,21 @@ Details on the various actions that can be performed on the Stats resource, incl
 
 ##### Contents
 
+*   [GetTeamInfo](#getteaminfo)
 *   [GetTeamStats](#getteamstats)
 *   [GetTeam](#getteam)
+
+<br/>
+
+## GetTeamInfo
+
+Retrieves info of team
+
+```ruby
+result = client.stats.get_team_info()
+
+puts result
+```
 
 <br/>
 

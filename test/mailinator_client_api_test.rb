@@ -119,16 +119,35 @@ class MailinatorClientApiTest < MiniTest::Test
       assert response != nil, "Expected post message response to not be nil"
       assert response["status"] == "ok", "Expected post message response to be ok"
 
-      response = client.messages.fetch_inbox(domain:@domainName, inbox: @inboxAll, skip: 0, limit: 50, sort: "ascending", decodeSubject: false)
+      response = client.messages.fetch_inbox(domain:@domainName, inbox: @inboxAll, skip: 0, limit: 1, sort: "ascending", decodeSubject: false)
       assert response != nil, "Expected fetch inbox response to not be nil"
       assert response["msgs"] != nil, "Expected response fetch inbox messages to not be nil"
       @message = response["msgs"][0]
       @messageId = @message["id"]
 
+      response = client.messages.fetch_inbox(domain:@domainName, inbox: @inboxAll, limit: 1, cursor: response["cursor"])
+      assert response != nil, "Expected fetch inbox response to not be nil"
+      assert response["msgs"] != nil, "Expected response fetch inbox messages to not be nil"
+
+      response = client.messages.fetch_inbox(domain:@domainName, inbox: @inboxAll, limit: 1, full: true)
+      assert response != nil, "Expected fetch inbox response to not be nil"
+      assert response["msgs"] != nil, "Expected response fetch inbox messages to not be nil"
+
+      response = client.messages.fetch_inbox(domain:@domainName, inbox: @inboxAll, limit: 1, delete: "1m")
+      assert response != nil, "Expected fetch inbox response to not be nil"
+      assert response["msgs"] != nil, "Expected response fetch inbox messages to not be nil"
+      
+      response = client.messages.fetch_inbox(domain:@domainName, inbox: @inboxAll, limit: 1, wait: "1m")
+      assert response != nil, "Expected fetch inbox response to not be nil"
+      assert response["msgs"] != nil, "Expected response fetch inbox messages to not be nil"
+      
       response = client.messages.fetch_inbox_message(domain:@domainName, inbox: @inboxAll, messageId: @messageId)
       assert response != nil, "Expected fetch inbox message response to not be nil"
 
       response = client.messages.fetch_message(domain:@domainName, messageId: @messageId)
+      assert response != nil, "Expected fetch message response to not be nil"
+      
+      response = client.messages.fetch_message(domain:@domainName, messageId: @messageId, delete: "10s")
       assert response != nil, "Expected fetch message response to not be nil"
 
       response = client.messages.fetch_sms_message(domain:@domainName, teamSmsNumber: @teamSMSNumber)
@@ -145,6 +164,10 @@ class MailinatorClientApiTest < MiniTest::Test
 
       response = client.messages.fetch_message_attachment(domain:@domainName, messageId: @messageIdWithAttachment, attachmentId: @attachmentId)
       assert response != nil, "Expected fetch message attachment response to not be nil"
+
+      response = client.messages.fetch_message_links_full(domain:@domainName, messageId: @messageId)
+      assert response != nil, "Expected fetch message links full response to not be nil"
+      assert response["links"] != nil, "Expected fetch message links links full response to not be nil"
 
       response = client.messages.fetch_message_links(domain:@domainName, messageId: @messageId)
       assert response != nil, "Expected fetch message links response to not be nil"
@@ -184,6 +207,10 @@ class MailinatorClientApiTest < MiniTest::Test
       assert response != nil, "Expected delete all domain messages response to not be nil"
       assert response["status"] == "ok", "Expected delete all domain messages response to be ok"
 
+      response = client.stats.get_team_info
+      assert response != nil, "Expected response to not be nil"
+      assert response != nil, "Expected response team info to not be nil"
+
       response = client.stats.get_team_stats
       assert response != nil, "Expected response to not be nil"
       assert response["stats"] != nil, "Expected response stats to not be nil"
@@ -199,19 +226,6 @@ class MailinatorClientApiTest < MiniTest::Test
       }
 
       clientWithoutAuthToken = MailinatorClient::Client.new()
-      response = clientWithoutAuthToken.webhooks.public_webhook(webhook:webhook)
-      assert response != nil, "Expected public webhook response to not be nil"
-      assert response["status"] == "ok", "Expected public webhook response to be ok"
-      
-      response = clientWithoutAuthToken.webhooks.public_inbox_webhook(inbox: @webhookInbox, webhook:webhook)
-      assert response != nil, "Expected public inbox webhook response to not be nil"
-      assert response["status"] == "ok", "Expected public inbox webhook response to be ok"
-
-      response = clientWithoutAuthToken.webhooks.public_custom_service_webhook(customService: @webhookCustomService, webhook:webhook)
-      #assert response != nil, "Expected public custom service webhook response to not be nil"
-      
-      response = clientWithoutAuthToken.webhooks.public_custom_service_inbox_webhook(customService: @webhookCustomService, inbox: @webhookInbox, webhook:webhook)
-      #assert response != nil, "Expected public custom service inbox webhook response to not be nil"
       
       response = clientWithoutAuthToken.webhooks.private_webhook(whToken: @webhookTokenPrivateDomain, webhook:webhook)
       assert response != nil, "Expected private webhook status response to not be nil"

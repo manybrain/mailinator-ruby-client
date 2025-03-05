@@ -31,121 +31,6 @@ module MailinatorClient
       @client = client
     end
 
-    # This command will deliver the message to the :to inbox that was set into request object
-    #
-    # Parameters:
-    # *  {string} webhook - The Webhook object
-    #
-    # Responses:
-    # *  PublicWebhookResponse (https://manybrain.github.io/m8rdocs/#public-webhook)
-    def public_webhook(params = {})
-      query_params = {}
-      headers = {}
-      body = nil
-
-      raise ArgumentError.new("webhook is required") unless params.has_key?(:webhook)
-
-      body = params[:webhook] if params.has_key?(:webhook)
-
-      path = "/domains/public/webhook"
-
-      response = @client.request(
-        method: :post,
-        path: path,
-        query: query_params,
-        headers: headers,
-        body: body)
-    end
-    
-    # This command will deliver the message to the :inbox inbox
-    # Note that if the Mailinator system cannot determine the destination inbox via the URL or a "to" field in the payload, the message will be rejected.
-    # If the message contains a "from" and "subject" field, these will be visible on the inbox page.
-    #
-    # Parameters:
-    # *  {string} inbox - inbox
-    # *  {string} webhook - The Webhook object
-    #
-    # Responses:
-    # *  PublicWebhookResponse (https://manybrain.github.io/m8rdocs/#public-inbox-webhook)
-    def public_inbox_webhook(params = {})
-      query_params = {}
-      headers = {}
-      body = nil
-
-      raise ArgumentError.new("inbox is required") unless params.has_key?(:inbox)
-      raise ArgumentError.new("webhook is required") unless params.has_key?(:webhook)
-
-      body = params[:webhook] if params.has_key?(:webhook)
-
-      path = "/domains/public/webhook/#{params[:inbox]}"
-
-      response = @client.request(
-        method: :post,
-        path: path,
-        query: query_params,
-        headers: headers,
-        body: body)
-    end
-    
-    # If you have a Twilio account which receives incoming SMS messages. You may direct those messages through this facility to inject those messages into the Mailinator system.
-    #
-    # Parameters:
-    # *  {string} customService - custom service name
-    # *  {string} webhook - The Webhook object
-    #
-    # Responses:
-    # *  PublicWebhookResponse (https://manybrain.github.io/m8rdocs/#public-custom-service-webhook)
-    def public_custom_service_webhook(params = {})
-      query_params = {}
-      headers = {}
-      body = nil
-
-      raise ArgumentError.new("customService is required") unless params.has_key?(:customService)
-      raise ArgumentError.new("webhook is required") unless params.has_key?(:webhook)
-
-      body = params[:webhook] if params.has_key?(:webhook)
-
-      path = "/domains/public/#{params[:customService]}"
-
-      response = @client.request(
-        method: :post,
-        path: path,
-        query: query_params,
-        headers: headers,
-        body: body)
-    end
-
-    # The SMS message will arrive in the Public Mailinator inbox corresponding to the Twilio Phone Number. (only the digits, if a plus sign precedes the number it will be removed)
-    # If you wish the message to arrive in a different inbox, you may append the destination inbox to the URL.
-    #
-    # Parameters:
-    # *  {string} inbox - inbox
-    # *  {string} customService - custom service name
-    # *  {string} webhook - The Webhook object
-    #
-    # Responses:
-    # *  PublicWebhookResponse (https://manybrain.github.io/m8rdocs/#public-custom-service-inbox-webhook)
-    def public_custom_service_inbox_webhook(params = {})
-      query_params = {}
-      headers = {}
-      body = nil
-
-      raise ArgumentError.new("customService is required") unless params.has_key?(:customService)
-      raise ArgumentError.new("inbox is required") unless params.has_key?(:inbox)
-      raise ArgumentError.new("webhook is required") unless params.has_key?(:webhook)
-
-      body = params[:webhook] if params.has_key?(:webhook)
-
-      path = "/domains/public/#{params[:customService]}/#{params[:inbox]}"
-
-      response = @client.request(
-        method: :post,
-        path: path,
-        query: query_params,
-        headers: headers,
-        body: body)
-    end
-    
     # This command will Webhook messages into your Private Domain
     # The incoming Webhook will arrive in the inbox designated by the "to" field in the incoming request payload.
     # Webhooks into your Private System do NOT use your regular API Token.
@@ -159,17 +44,17 @@ module MailinatorClient
     # Responses:
     # *  PrivateWebhookResponse (https://manybrain.github.io/m8rdocs/#private-webhook)
     def private_webhook(params = {})
-      query_params = {}
+      query_params = { whtoken: "" }
       headers = {}
       body = nil
 
       raise ArgumentError.new("whToken is required") unless params.has_key?(:whToken)
       raise ArgumentError.new("webhook is required") unless params.has_key?(:webhook)
+      
+      query_params[:whtoken] = params[:whToken] if params.has_key?(:whToken)
 
-      body = params[:webhook] if params.has_key?(:webhook)
-
-      path = "/domains/#{params[:whToken]}/webhook"
-
+      path = "/domains/private/webhook"
+      
       response = @client.request(
         method: :post,
         path: path,
@@ -192,7 +77,7 @@ module MailinatorClient
     # Responses:
     # *  PrivateWebhookResponse (https://manybrain.github.io/m8rdocs/#private-inbox-webhook)
     def private_inbox_webhook(params = {})
-      query_params = {}
+      query_params = { whtoken: "" }
       headers = {}
       body = nil
 
@@ -202,7 +87,9 @@ module MailinatorClient
 
       body = params[:webhook] if params.has_key?(:webhook)
 
-      path = "/domains/#{params[:whToken]}/webhook/#{params[:inbox]}"
+      query_params[:whtoken] = params[:whToken] if params.has_key?(:whToken)
+
+      path = "/domains/private/webhook/#{params[:inbox]}"
 
       response = @client.request(
         method: :post,
@@ -224,7 +111,7 @@ module MailinatorClient
     # Responses:
     # *  PrivateWebhookResponse (https://manybrain.github.io/m8rdocs/#private-custom-service-webhook)
     def private_custom_service_webhook(params = {})
-      query_params = {}
+      query_params = { whtoken: "" }
       headers = {}
       body = nil
 
@@ -233,8 +120,10 @@ module MailinatorClient
       raise ArgumentError.new("webhook is required") unless params.has_key?(:webhook)
 
       body = params[:webhook] if params.has_key?(:webhook)
+      
+      query_params[:whtoken] = params[:whToken] if params.has_key?(:whToken)
 
-      path = "/domains/#{params[:whToken]}/#{params[:customService]}"
+      path = "/domains/private/#{params[:customService]}"
 
       response = @client.request(
         method: :post,
@@ -256,7 +145,7 @@ module MailinatorClient
     # Responses:
     # *  PrivateWebhookResponse (https://manybrain.github.io/m8rdocs/#private-custom-service-inbox-webhook)
     def private_custom_service_inbox_webhook(params = {})
-      query_params = {}
+      query_params = { whtoken: "" }
       headers = {}
       body = nil
 
@@ -266,8 +155,10 @@ module MailinatorClient
       raise ArgumentError.new("webhook is required") unless params.has_key?(:webhook)
 
       body = params[:webhook] if params.has_key?(:webhook)
+      
+      query_params[:whtoken] = params[:whToken] if params.has_key?(:whToken)
 
-      path = "/domains/#{params[:whToken]}/#{params[:customService]}/#{params[:inbox]}"
+      path = "/domains/private/#{params[:customService]}/#{params[:inbox]}"
 
       response = @client.request(
         method: :post,

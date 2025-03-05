@@ -4,66 +4,10 @@ Details on the various actions that can be performed on the Webhooks resource, i
 
 ##### Contents
 
-*   [PublicWebhook](#publicwebhook)
-*   [PublicInboxWebhook](#publicinboxwebhook)
-*   [PublicCustomServiceWebhook](#publiccustomservicewebhook)
-*   [PublicCustomServiceInboxWebhook](#publiccustomserviceinboxwebhook)
 *   [PrivateWebhook](#privatewebhook)
 *   [PrivateInboxWebhook](#privateinboxwebhook)
 *   [PrivateCustomServiceWebhook](#privatecustomservicewebhook)
 *   [PrivateCustomServiceInboxWebhook](#privatecustomserviceinboxwebhook)
-
-<br/>
-
-## PublicWebhook
-
-This command will deliver the message to the :to inbox that was set into request object
-
-```ruby
-result = client.webhooks.public_webhook()
-
-puts result
-```
-
-<br/>
-
-## PublicInboxWebhook
-
-This command will deliver the message to the :inbox inbox
-Note that if the Mailinator system cannot determine the destination inbox via the URL or a "to" field in the payload, the message will be rejected.
-If the message contains a "from" and "subject" field, these will be visible on the inbox page.
-    
-
-```ruby
-result = client.webhooks.public_inbox_webhook()
-
-puts result
-```
-
-<br/>
-
-## PublicCustomServiceWebhook
-
-If you have a Twilio account which receives incoming SMS messages. You may direct those messages through this facility to inject those messages into the Mailinator system.
-
-```ruby
-result = client.webhooks.public_custom_service_webhook()
-
-puts result
-```
-
-<br/>
-
-## PublicCustomServiceInboxWebhook
-
-The SMS message will arrive in the Public Mailinator inbox corresponding to the Twilio Phone Number. (only the digits, if a plus sign precedes the number it will be removed)
-If you wish the message to arrive in a different inbox, you may append the destination inbox to the URL.
-    
-```ruby
-result = client.webhooks.public_custom_service_inbox_webhook()
-
-puts result
-```
 
 <br/>
 

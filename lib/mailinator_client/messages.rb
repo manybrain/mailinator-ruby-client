@@ -40,10 +40,14 @@ module MailinatorClient
     # Parameters:
     # *  {string} domainId - The Domain name or the Domain id
     # *  {string} inbox - The Inbox name
-    # *  {number} skip - Skip this many emails in your Private Domain
-    # *  {number} limit - Number of emails to fetch from your Private Domain
-    # *  {string} sort - Sort results by ascending or descending
-    # *  {boolean} decodeSubject - true: decode encoded subjects
+    # *  {number} skip - [Optional] Skip this many emails in your Private Domain
+    # *  {number} limit - [Optional] Number of emails to fetch from your Private Domain
+    # *  {string} sort - [Optional] Sort results by ascending or descending
+    # *  {boolean} decodeSubject - [Optional] true: decode encoded subjects
+    # *  {string} cursor - [Optional] Pagination cursor for large result sets (obtained from previous response)
+    # *  {boolean} full - [Optional] Return full email content with body/attachments (true) or just metadata (false). Default: false
+    # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
+    # *  {string} wait - [Optional] Maximum time to wait for new messages (e.g., "30s" = 30 seconds)
     #
     # Responses:
     # *  Collection of messages (https://manybrain.github.io/m8rdocs/#fetch-inbox-aka-fetch-message-summaries)
@@ -60,6 +64,10 @@ module MailinatorClient
       query_params[:limit] = params[:limit] if params.has_key?(:limit)
       query_params[:sort] = params[:sort] if params.has_key?(:sort)
       query_params[:decodeSubject] = params[:decodeSubject] if params.has_key?(:decodeSubject)
+      query_params[:cursor] = params[:cursor] if params.has_key?(:cursor)
+      query_params[:full] = params[:full] if params.has_key?(:full)
+      query_params[:delete] = params[:delete] if params.has_key?(:delete)
+      query_params[:wait] = params[:wait] if params.has_key?(:wait)
 
       path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}"
 
@@ -113,6 +121,7 @@ module MailinatorClient
     # Parameters:
     # *  {string} domainId - The Domain name or the Domain id
     # *  {string} messageId - The Message id
+    # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
     #
     # Responses:
     # *  Message (https://manybrain.github.io/m8rdocs/#fetch-message)
@@ -124,6 +133,8 @@ module MailinatorClient
 
       raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
       raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      query_params[:delete] = params[:delete] if params.has_key?(:delete)
 
       path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}"
 
@@ -289,6 +300,37 @@ module MailinatorClient
       raise ArgumentError.new("attachment id is required") unless params.has_key?(:attachmentId)
 
       path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/attachments/#{params[:attachmentId]}"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves all links full info found within a given email.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Collection of links full (https://manybrain.github.io/m8rdocs/#fetch-links-full)
+    def fetch_message_links_full(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/linksfull"
 
       @client.request(
         method: :get,
