@@ -3,8 +3,8 @@ require "mailinator_client/version"
 
 Gem::Specification.new do |gem|
   gem.name          = "mailinator_client"
-  gem.authors       = ["Marian Melnychuk"]
-  gem.email         = ["marian.melnychuk@gmail.com"]
+  gem.authors       = ["Manybrain, LLC"]
+  gem.email         = ["support@manybrain.com"]
   gem.summary       = %q{Provides a simple ruby wrapper around the Mailinator REST API}
   gem.description   = %q{Easily use the Mailinator through its REST API with Ruby}
   gem.homepage      = "https://github.com/manybrain/mailinator-ruby-client"
