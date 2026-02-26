@@ -1,12 +1,17 @@
-# Mailinator Ruby REST API Client
+# Mailinator Ruby SDK
 
-[![Build Status](https://travis-ci.org/manybrain/mailinator-ruby-client.svg?branch=master)](https://travis-ci.org/manybrain/mailinator-ruby-client)  [![Gem Version](https://badge.fury.io/rb/mailinator_client.svg)](https://badge.fury.io/rb/mailinator_client)
+The official Mailinator Ruby SDK. This REST API client is implemented as a thin wrapper around the [Mailinator API](https://www.mailinator.com/documentation/docs/api/index.html). The OpenAPI specification is the source of truth.
 
-The [Mailinator](https://www.mailinator.com/) REST API client provides a simple way to use the comprehensive Mailinator API.
+[![Gem Version](https://badge.fury.io/rb/mailinator_client.svg)](https://badge.fury.io/rb/mailinator_client)
 
-This client works with Ruby 2.1 and higher. It uses [HTTParty](https://github.com/jnunemaker/httparty) under the covers for the actual HTTP communication.
+> [!NOTE]
+> This client works with Ruby 2.1 and higher. It uses [HTTParty](https://github.com/jnunemaker/httparty) under the covers for the actual HTTP communication.
 
-<br/>
+
+
+## API Reference
+
+See [Mailinator's API Reference](https://www.mailinator.com/documentation/docs/api/index.html) for all of the currently available API endpoints.
 
 ## Installation
 
@@ -104,10 +109,3 @@ Most of the tests require env variables with valid values. Visit tests source co
 * `MAILINATOR_TEST_AUTH_ID` - authenticator id
 * `MAILINATOR_TEST_WEBHOOK_INBOX` - inbox for webhook
 * `MAILINATOR_TEST_WEBHOOK_CUSTOMSERVICE` - custom service for webhook
-
-
-*****
-
-Copyright (c) 2024 Manybrain, Inc
-
-<https://www.mailinator.com/>
