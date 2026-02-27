@@ -9,6 +9,7 @@ module MailinatorClient
       @client = client
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Creates a Rule. Note that in the examples, ":domain_id" can be one of your private domains.
     #
     # Authentication:
@@ -42,6 +43,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Enables an existing Rule
     #
     # Authentication:
@@ -73,6 +75,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Disables an existing Rule
     #
     # Authentication:
@@ -104,6 +107,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Fetches all Rules for a Domain.
     #
     # Authentication:
@@ -133,6 +137,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Fetches a specific rule for a Domain.
     #
     # Authentication:
@@ -164,6 +169,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Deletes a specific rule for a Domain.
     #
     # Authentication:

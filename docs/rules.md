@@ -2,6 +2,9 @@
 
 Details on the various actions that can be performed on the Rules resource, including the expected parameters and the potential responses.
 
+> [!WARNING]
+> All Rules endpoints in this SDK are deprecated.
+
 ##### Contents
 
 *   [CreateRule](#createrule)
@@ -13,7 +16,7 @@ Details on the various actions that can be performed on the Rules resource, incl
 
 <br/>
 
-## CreateRule
+## CreateRule (Deprecated)
 
 Creates a Rule
 
@@ -28,7 +31,7 @@ puts result
 
 <br/>
 
-## EnableRule
+## EnableRule (Deprecated)
 
 Enables an existing Rule
 
@@ -42,7 +45,7 @@ puts result
 
 <br/>
 
-## DisableRule
+## DisableRule (Deprecated)
 
 Disables an existing Rule
 
@@ -56,7 +59,7 @@ puts result
 
 <br/>
 
-## GetAllRules
+## GetAllRules (Deprecated)
 
 Fetches all Rules for a Domain
 
@@ -68,7 +71,7 @@ puts result
 
 <br/>
 
-## GetRule
+## GetRule (Deprecated)
 
 Fetches a specific rule for a Domain
 
@@ -82,7 +85,7 @@ puts result
 
 <br/>
 
-## DeleteRule
+## DeleteRule (Deprecated)
 
 Deletes a specific rule for a Domain
 

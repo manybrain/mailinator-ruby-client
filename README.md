@@ -61,6 +61,7 @@ Each of the following is a method on the client object, and returns a wrapper fo
 
 * [rules](docs/rules.md)  
   Contains all of the actions that can be performed against the set of [Rules](https://manybrain.github.io/m8rdocs/#rules-api) that the currently authenticated user has access to - such as listing the rules or creating a new rule.
+  **Deprecated:** Rules endpoints in this SDK are deprecated.
 
 * [messages](docs/messages.md)  
   Contains all of the actions that can be performed against the set of [Messages](https://manybrain.github.io/m8rdocs/#message-api) that the currently authenticated user has access to - such as listing the messages or injecting a new message.
