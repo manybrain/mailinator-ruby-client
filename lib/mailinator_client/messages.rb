@@ -1,25 +1,3 @@
-# The MIT License (MIT)
-#
-# Copyright (c) 2024 Manybrain, Inc.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 require "json"
 
 module MailinatorClient
@@ -89,6 +67,7 @@ module MailinatorClient
     # *  {string} domainId - The Domain name or the Domain id
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
+    # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
     #
     # Responses:
     # *  Message (https://manybrain.github.io/m8rdocs/#fetch-inbox-message)
@@ -101,6 +80,8 @@ module MailinatorClient
       raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
       raise ArgumentError.new("inbox is required") unless params.has_key?(:inbox)
       raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      query_params[:delete] = params[:delete] if params.has_key?(:delete)
 
       path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}/messages/#{params[:messageId]}"
 
@@ -155,17 +136,35 @@ module MailinatorClient
     # Parameters:
     # *  {string} domainId - The Domain name or the Domain id
     # *  {string} teamSmsNumber - The Team sms number
+    # *  {number} skip - [Optional] Skip this many emails in your Private Domain
+    # *  {number} limit - [Optional] Number of emails to fetch from your Private Domain
+    # *  {string} sort - [Optional] Sort results by ascending or descending
+    # *  {boolean} decode_subject - [Optional] true: decode encoded subjects
+    # *  {string} cursor - [Optional] Pagination cursor for large result sets (obtained from previous response)
+    # *  {boolean} full - [Optional] Return full email content with body/attachments (true) or just metadata (false). Default: false
+    # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
+    # *  {string} wait - [Optional] Maximum time to wait for new messages (e.g., "30s" = 30 seconds)
     #
     # Responses:
     # *  Collection of messages (https://manybrain.github.io/m8rdocs/#fetch-an-sms-messages)
     def fetch_sms_message(params = {})
       params = Utils.symbolize_hash_keys(params)
-      query_params = { }
+      query_params = { skip: 0, limit: 50, sort: "ascending", decode_subject: false }
       headers = {}
       body = nil
 
       raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
       raise ArgumentError.new("team sms number is required") unless params.has_key?(:teamSmsNumber)
+
+      query_params[:skip] = params[:skip] if params.has_key?(:skip)
+      query_params[:limit] = params[:limit] if params.has_key?(:limit)
+      query_params[:sort] = params[:sort] if params.has_key?(:sort)
+      query_params[:decode_subject] = params[:decode_subject] if params.has_key?(:decode_subject)
+      query_params[:decode_subject] = params[:decodeSubject] if params.has_key?(:decodeSubject)
+      query_params[:cursor] = params[:cursor] if params.has_key?(:cursor)
+      query_params[:full] = params[:full] if params.has_key?(:full)
+      query_params[:delete] = params[:delete] if params.has_key?(:delete)
+      query_params[:wait] = params[:wait] if params.has_key?(:wait)
 
       path = "/domains/#{params[:domain]}/inboxes/#{params[:teamSmsNumber]}"
 

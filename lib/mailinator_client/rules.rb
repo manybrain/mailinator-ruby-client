@@ -1,25 +1,3 @@
-# The MIT License (MIT)
-#
-# Copyright (c) 2024 Manybrain, Inc.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 require "json"
 
 module MailinatorClient
@@ -31,6 +9,7 @@ module MailinatorClient
       @client = client
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Creates a Rule. Note that in the examples, ":domain_id" can be one of your private domains.
     #
     # Authentication:
@@ -64,6 +43,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Enables an existing Rule
     #
     # Authentication:
@@ -95,6 +75,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Disables an existing Rule
     #
     # Authentication:
@@ -126,6 +107,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Fetches all Rules for a Domain.
     #
     # Authentication:
@@ -155,6 +137,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Fetches a specific rule for a Domain.
     #
     # Authentication:
@@ -186,6 +169,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Rules endpoints are deprecated in this client.
     # Deletes a specific rule for a Domain.
     #
     # Authentication:
