@@ -61,7 +61,8 @@ module MailinatorClient
         body: body)
     end
 
-    # This endpoint creates a private domain attached to your account. 
+    # @deprecated Create Domain is deprecated in this client.
+    # This endpoint creates a private domain attached to your account.
     # Note, the domain must be unique to the system and you must have not reached your maximum number of Private Domains.
     #
     # Authentication:
@@ -91,6 +92,7 @@ module MailinatorClient
         body: body)
     end
 
+    # @deprecated Delete Domain is deprecated in this client.
     # This endpoint deletes a Private Domain
     #
     # Authentication:

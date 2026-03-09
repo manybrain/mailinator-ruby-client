@@ -37,6 +37,9 @@ puts result
 
 ## CreateDomain
 
+> [!WARNING]
+> Deprecated in this SDK.
+
 This endpoint creates a private domain attached to your account. Note, the domain must be unique to the system and you must have not reached your maximum number of Private Domains.
 
 ```ruby
@@ -48,6 +51,9 @@ puts result
 <br/>
 
 ## DeleteDomain
+
+> [!WARNING]
+> Deprecated in this SDK.
 
 This endpoint deletes a Private Domain
 
