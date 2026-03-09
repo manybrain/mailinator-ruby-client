@@ -56,7 +56,7 @@ module MailinatorClient
 
       result = response.parsed_response
       if response.code >= 400
-        raise ResponseError.new(response.code, result)
+        raise ResponseError.new(response.code, result, response.body)
       end
       
       result
