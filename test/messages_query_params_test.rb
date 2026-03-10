@@ -48,8 +48,7 @@ class MessagesQueryParamsTest < Minitest::Test
       limit: 10,
       sort: "descending",
       decode_subject: true,
-      full: false,
-      wait: "20s"
+      full: false
     ) rescue begin
       e = $!
       if e.is_a?(MailinatorClient::ResponseError)

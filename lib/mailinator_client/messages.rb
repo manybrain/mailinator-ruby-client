@@ -25,7 +25,6 @@ module MailinatorClient
     # *  {string} cursor - [Optional] Pagination cursor for large result sets (obtained from previous response)
     # *  {boolean} full - [Optional] Return full email content with body/attachments (true) or just metadata (false). Default: false
     # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
-    # *  {string} wait - [Optional] Maximum time to wait for new messages (e.g., "30s" = 30 seconds)
     #
     # Responses:
     # *  Collection of messages (https://manybrain.github.io/m8rdocs/#fetch-inbox-aka-fetch-message-summaries)
@@ -45,7 +44,6 @@ module MailinatorClient
       query_params[:cursor] = params[:cursor] if params.has_key?(:cursor)
       query_params[:full] = params[:full] if params.has_key?(:full)
       query_params[:delete] = params[:delete] if params.has_key?(:delete)
-      query_params[:wait] = params[:wait] if params.has_key?(:wait)
 
       path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}"
 
@@ -100,12 +98,12 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
     #
     # Responses:
-    # *  Message (https://manybrain.github.io/m8rdocs/#fetch-message)
+    # *  Message (https://www.mailinator.com/documentation/docs/api/get-domain-message/index.html)
     def fetch_message(params = {})
       params = Utils.symbolize_hash_keys(params)
       query_params = { }
@@ -134,7 +132,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:

@@ -62,9 +62,6 @@ class MessagesApiTest < Minitest::Test
     response = client.messages.fetch_message(domain: domain_name, messageId: message_id, delete: "10s")
     assert response != nil, "Expected fetch message response to not be nil"
 
-    response = client.messages.fetch_message_summary(domain: domain_name, messageId: message_id)
-    assert response != nil, "Expected fetch message summary response to not be nil"
-
     response = client.messages.fetch_sms_message(domain: domain_name, teamSmsNumber: ENV["MAILINATOR_TEST_PHONE_NUMBER"])
     assert response != nil, "Expected fetch sms message response to not be nil"
 

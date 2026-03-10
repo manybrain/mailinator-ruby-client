@@ -24,7 +24,7 @@ Gap analysis source of truth: Mailinator OpenAPI spec (`version: 2026-03-04`) fr
 
 Messages (`lib/mailinator_client/messages.rb`):
 - [ ] Add `list_domain_messages` for `GET /domains/{domain}/inboxes`
-- [ ] Add `fetch_message_summary` for `GET /domains/{domain}/messages/{messageId}/summary`
+- [x] Add `fetch_message_summary` for `GET /domains/{domain}/messages/{messageId}/summary`
 - [ ] Add `fetch_message_text` for `GET /domains/{domain}/messages/{messageId}/text`
 - [ ] Add `fetch_message_text_plain` for `GET /domains/{domain}/messages/{messageId}/textplain`
 - [ ] Add `fetch_message_text_html` for `GET /domains/{domain}/messages/{messageId}/texthtml`

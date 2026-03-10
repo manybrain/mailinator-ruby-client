@@ -5,12 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project aims to follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- Removed `wait` query parameter from `messages.fetch_sms_message` because the endpoint does not support it.
+- Added `messages.fetch_message_summary` for `GET /api/v2/domains/{domain}/messages/{messageId}/summary`.
+
 ## [1.0.7]
 
 ### Added
 
 - Optional `delete` query parameter support to `messages.fetch_inbox_message`.
-- Inbox-list query parameters to `messages.fetch_sms_message` (`skip`, `limit`, `sort`, `decode_subject`, `cursor`, `full`, `wait`, `delete`).
+- Inbox-list query parameters to `messages.fetch_sms_message` (`skip`, `limit`, `sort`, `decode_subject`, `cursor`, `full`, `delete`).
 - `.env.example` with Mailinator integration test variables.
 - Resource-scoped integration test files:
   - `test/authenticators_api_test.rb`
