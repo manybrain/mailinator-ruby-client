@@ -192,3 +192,11 @@ After implementing:
 | No-token requests | Supported by instantiating `Client` without `auth_token` (used by some webhook flows). |
 | Deprecation marker | Use Ruby/YARD style deprecation comments near method definitions and reflect in README/docs. |
 | Entrypoint loading | `lib/mailinator_client.rb` requires resource/support files and delegates module methods to singleton client. |
+
+### Test Expectations
+
+- Integration tests should exercise real HTTP requests to Mailinator endpoints. Do not use request-mocking tools (for example, `WebMock.stub_request`) for endpoint coverage tests.
+- Assertions must validate response semantics, not just existence. Prefer checking:
+  - expected HTTP success behavior (or explicit failure with returned status code),
+  - expected JSON shape (required keys),
+  - important field-level values (for example, IDs or arrays) relevant to the endpoint contract.
