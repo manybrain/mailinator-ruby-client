@@ -90,10 +90,16 @@ When the Mailinator API returns a unsuccessful response, an instance of Response
 
 ## Testing
 
-Run integration tests with real API Key.
+Run individual integration tests with real API Key.
 
 ```ruby
 ruby -I test test/mailinator_client_api_test.rb
+```
+
+OR run them all:
+
+```ruby
+bundle exec rake test
 ```
 
 Most of the tests require env variables with valid values. Visit tests source code and review `mailinator_client_api_test.rb` file. The more env variables you set, the more tests are run.

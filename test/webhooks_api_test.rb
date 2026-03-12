@@ -4,6 +4,7 @@ class WebhooksApiTest < Minitest::Test
   def test_webhooks_endpoints
     require_env!(
       "MAILINATOR_TEST_WEBHOOKTOKEN_PRIVATEDOMAIN",
+      "MAILINATOR_TEST_WEBHOOKTOKEN_CUSTOMSERVICE",
       "MAILINATOR_TEST_WEBHOOK_INBOX",
       "MAILINATOR_TEST_WEBHOOK_CUSTOMSERVICE"
     )
@@ -32,15 +33,14 @@ class WebhooksApiTest < Minitest::Test
     assert response != nil, "Expected private inbox webhook response to not be nil"
     assert response["status"] == "ok", "Expected private inbox webhook response to be ok"
 
-    # Known bug: currently uses private-domain token, not custom-service token.
     client_without_auth.webhooks.private_custom_service_webhook(
-      whToken: ENV["MAILINATOR_TEST_WEBHOOKTOKEN_PRIVATEDOMAIN"],
+      whToken: ENV["MAILINATOR_TEST_WEBHOOKTOKEN_CUSTOMSERVICE"],
       customService: ENV["MAILINATOR_TEST_WEBHOOK_CUSTOMSERVICE"],
       webhook: webhook
     )
 
     client_without_auth.webhooks.private_custom_service_inbox_webhook(
-      whToken: ENV["MAILINATOR_TEST_WEBHOOKTOKEN_PRIVATEDOMAIN"],
+      whToken: ENV["MAILINATOR_TEST_WEBHOOKTOKEN_CUSTOMSERVICE"],
       customService: ENV["MAILINATOR_TEST_WEBHOOK_CUSTOMSERVICE"],
       inbox: ENV["MAILINATOR_TEST_WEBHOOK_INBOX"],
       webhook: webhook

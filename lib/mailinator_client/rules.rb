@@ -17,7 +17,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} ruleToPost - The Rule object (https://manybrain.github.io/m8rdocs/#create-rule)
     #
     # Responses:
@@ -51,7 +51,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} ruleId - The Rule id
     #
     # Responses:
@@ -83,7 +83,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} ruleId - The Rule id
     #
     # Responses:
@@ -115,7 +115,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     #
     # Responses:
     # *  Collection of rules (https://manybrain.github.io/m8rdocs/#get-all-rules)
@@ -145,7 +145,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} ruleId - The Domain name or the Rule id
     #
     # Responses:
@@ -177,7 +177,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} ruleId - The Rule id
     #
     # Responses:

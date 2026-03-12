@@ -29,6 +29,7 @@ module MailinatorClient
       raise ArgumentError.new("whToken is required") unless params.has_key?(:whToken)
       raise ArgumentError.new("webhook is required") unless params.has_key?(:webhook)
       
+      body = params[:webhook] if params.has_key?(:webhook)
       query_params[:whtoken] = params[:whToken] if params.has_key?(:whToken)
 
       path = "/domains/private/webhook"
