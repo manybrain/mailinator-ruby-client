@@ -2,7 +2,7 @@
 
 This document explains the relationship between this Ruby client and the Mailinator OpenAPI specification.
 
-**OpenAPI Specification:** [https://github.com/manybrain/mailinatordocs/blob/main/openapi/mailinator-api.yaml](https://github.com/manybrain/mailinatordocs/blob/main/openapi/mailinator-api.yaml)
+**OpenAPI Specification:** [Found on GitHub](https://github.com/manybrain/mailinatordocs/blob/main/openapi/mailinator-api.yaml)
 
 ## Codebase Structure
 
@@ -85,7 +85,7 @@ Extract every `paths` entry. For each path, record:
 - The tag (maps to the SDK module directory)
 - All query parameters defined under `parameters`
 
-### Step 2 — Catalogue the SDK
+### Step 2 — Catalog the SDK
 
 For each resource file under `lib/mailinator_client/` (`messages.rb`, `domains.rb`, `rules.rb`, etc.):
 1. Enumerate every public method that issues `@client.request(...)`.
