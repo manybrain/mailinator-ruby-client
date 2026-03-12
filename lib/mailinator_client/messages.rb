@@ -187,6 +187,37 @@ module MailinatorClient
         body: body)
     end
 
+    # Retrieves text/plain content for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message text/plain response
+    def fetch_message_textplain(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/textplain"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
     # Retrieves a specific SMS message by sms number.
     #
     # Authentication:
