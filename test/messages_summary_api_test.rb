@@ -23,9 +23,6 @@ class MessagesSummaryApiTest < Minitest::Test
     end
 
     assert_kind_of(Hash, response, "Expected message summary endpoint to return a JSON object")
-    summary = response["summary"] || response
-
-    assert summary != nil, "Expected summary object to be present in response"
-    assert summary["id"] != nil, "Expected summary.id to not be nil"
+    assert_equal(["summary"], response.keys.sort, "Expected only the summary property")
   end
 end

@@ -14,9 +14,15 @@ class MessagesTextApiTest < Minitest::Test
     response = client.messages.fetch_message_text(
       domain: domain_name,
       messageId: ENV["MAILINATOR_TEST_MESSAGE_WITH_ATTACHMENT_ID"]
-    )
+    ) rescue begin
+      e = $!
+      if e.is_a?(MailinatorClient::ResponseError)
+        flunk "Expected HTTP 200 from message text endpoint, got HTTP #{e.code}"
+      end
+      raise
+    end
 
-    assert_kind_of(Hash, response, "Expected fetch message text response to be JSON object")
-    assert response["text"] != nil, "Expected response.text to not be nil"
+    assert_kind_of(Hash, response, "Expected message text response to be a JSON object")
+    assert_equal(["text"], response.keys.sort, "Expected only the text property")
   end
 end
