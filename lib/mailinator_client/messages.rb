@@ -16,7 +16,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {number} skip - [Optional] Skip this many emails in your Private Domain
     # *  {number} limit - [Optional] Number of emails to fetch from your Private Domain
@@ -62,7 +62,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
@@ -156,6 +156,37 @@ module MailinatorClient
         body: body)
     end
 
+    # Retrieves text content for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message text response
+    def fetch_message_text(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/text"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
     # Retrieves a specific SMS message by sms number.
     #
     # Authentication:
@@ -163,7 +194,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} teamSmsNumber - The Team sms number
     # *  {number} skip - [Optional] Skip this many emails in your Private Domain
     # *  {number} limit - [Optional] Number of emails to fetch from your Private Domain
@@ -212,7 +243,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -245,7 +276,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -276,7 +307,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     # *  {string} attachmentId - The Attachment id
@@ -311,7 +342,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     # *  {string} attachmentId - The Attachment id
     #
@@ -344,7 +375,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -375,7 +406,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -406,7 +437,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -439,7 +470,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     #
     # Responses:
     # *  Status and count of removed messages (https://manybrain.github.io/m8rdocs/#delete-all-messages-by-domain)
@@ -468,7 +499,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     #
     # Responses:
@@ -499,7 +530,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -532,7 +563,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageToPost - The Message object (https://manybrain.github.io/m8rdocs/#inject-a-message-http-post-messages)
     #
@@ -567,7 +598,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -598,7 +629,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -631,7 +662,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -662,7 +693,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -695,7 +726,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     #
     # Responses:
     # *  Collection of latest messages (https://manybrain.github.io/m8rdocs/#fetch-latest-messages)
@@ -724,7 +755,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     #
     # Responses:

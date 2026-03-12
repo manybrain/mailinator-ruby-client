@@ -39,7 +39,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     #
     # Responses:
     # *  Domain (https://manybrain.github.io/m8rdocs/#get-domain)
@@ -100,7 +100,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     #
     # Responses:
     # *  Status (https://manybrain.github.io/m8rdocs/#delete-domain)
