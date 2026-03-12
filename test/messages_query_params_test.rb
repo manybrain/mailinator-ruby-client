@@ -4,20 +4,31 @@ class MessagesQueryParamsTest < Minitest::Test
   def test_fetch_inbox_message_accepts_optional_delete
     require_env!(
       "MAILINATOR_TEST_API_TOKEN",
-      "MAILINATOR_TEST_INBOX",
-      "MAILINATOR_TEST_MESSAGE_WITH_ATTACHMENT_ID"
+      "MAILINATOR_TEST_INBOX"
     )
 
     client = integration_client
     domain_name = ENV["MAILINATOR_TEST_DOMAIN"].to_s.strip
     domain_name = first_domain_name(client) if domain_name.empty?
-    message_id = ENV["MAILINATOR_TEST_MESSAGE_WITH_ATTACHMENT_ID"]
+
+    message_to_post = {
+      subject: "Query param delete test",
+      from: "test_email_ruby@test.com",
+      text: "Delete param integration test"
+    }
+    post_response = client.messages.post_message(
+      domain: domain_name,
+      inbox: "*",
+      messageToPost: message_to_post
+    )
+    message_id = post_response["id"]
+    assert message_id != nil, "Expected posted message id to not be nil"
 
     response = client.messages.fetch_inbox_message(
       domain: domain_name,
-      inbox: ENV["MAILINATOR_TEST_INBOX"],
+      inbox: "*",
       messageId: message_id,
-      delete: "10m"
+      delete: "1m"
     ) rescue begin
       e = $!
       if e.is_a?(MailinatorClient::ResponseError)
@@ -27,8 +38,9 @@ class MessagesQueryParamsTest < Minitest::Test
     end
 
     assert_kind_of(Hash, response, "Expected JSON object response for fetch_inbox_message")
-    assert response["id"] != nil, "Expected message id in fetch_inbox_message response"
-    assert_equal(message_id, response["id"], "Expected returned message id to match requested message id")
+    returned_id = response["id"] || response["mrid"]
+    assert returned_id != nil, "Expected message id in fetch_inbox_message response"
+    assert_equal(message_id, returned_id, "Expected returned message id to match requested message id")
   end
 
   def test_fetch_sms_message_supports_inbox_list_query_params

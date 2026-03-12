@@ -11,6 +11,7 @@ and this project aims to follow [Semantic Versioning](https://semver.org/).
 
 - Removed `wait` query parameter from `messages.fetch_sms_message` because the endpoint does not support it.
 - Added `messages.fetch_message_summary` for `GET /api/v2/domains/{domain}/messages/{messageId}/summary`.
+- Made attachment download tests derive attachment IDs from the attachments list, removing the need for `MAILINATOR_TEST_ATTACHMENT_ID`.
 
 ## [1.0.7]
 
