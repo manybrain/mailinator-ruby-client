@@ -27,8 +27,8 @@ Messages (`lib/mailinator_client/messages.rb`):
 - [x] Add `fetch_message_summary` for `GET /domains/{domain}/messages/{messageId}/summary`
 - [x] Add `fetch_message_text` for `GET /domains/{domain}/messages/{messageId}/text`
 - [x] Add `fetch_message_text_plain` for `GET /domains/{domain}/messages/{messageId}/textplain`
-- [ ] Add `fetch_message_text_html` for `GET /domains/{domain}/messages/{messageId}/texthtml`
-- [ ] Add `fetch_message_headers` for `GET /domains/{domain}/messages/{messageId}/headers`
+- [x] Add `fetch_message_text_html` for `GET /domains/{domain}/messages/{messageId}/texthtml`
+- [x] Add `fetch_message_headers` for `GET /domains/{domain}/messages/{messageId}/headers`
 - [ ] Add `stream_domain_messages` for `GET /domains/{domain}/stream`
 - [ ] Add `stream_inbox_messages` for `GET /domains/{domain}/stream/{inbox}`
 

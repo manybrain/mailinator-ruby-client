@@ -5,13 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project aims to follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0]
 
 ### Changed
 
 - Added `messages.fetch_message_summary` for `GET /api/v2/domains/{domain}/messages/{messageId}/summary`.
 - Added `messages.fetch_message_text` for `GET /api/v2/domains/{domain}/messages/{messageId}/text`.
 - Added `messages.fetch_message_textplain` for `GET /api/v2/domains/{domain}/messages/{messageId}/textplain`.
+- Added `messages.fetch_message_texthtml` for `GET /api/v2/domains/{domain}/messages/{messageId}/texthtml`.
+- Added `messages.fetch_message_headers` for `GET /api/v2/domains/{domain}/messages/{messageId}/headers`.
 - Removed `wait` query parameter from `messages.fetch_sms_message` because the endpoint does not support it.
 - Removed `wait` query parameter from `messages.fetch_inbox`.
 - Fixed `webhooks.private_webhook` to include the webhook payload in the request body.

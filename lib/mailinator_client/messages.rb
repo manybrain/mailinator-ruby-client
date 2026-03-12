@@ -47,12 +47,14 @@ module MailinatorClient
 
       path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}"
 
-      @client.request(
+      response = @client.request(
         method: :get,
         path: path,
         query: query_params,
         headers: headers,
         body: body)
+
+      response
     end
 
     # Retrieves a specific message by id for specific inbox.
@@ -209,6 +211,68 @@ module MailinatorClient
       raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
 
       path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/textplain"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves text/html content for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message text/html response
+    def fetch_message_texthtml(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/texthtml"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves headers for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message headers response
+    def fetch_message_headers(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/headers"
 
       @client.request(
         method: :get,
