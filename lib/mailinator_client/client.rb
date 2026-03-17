@@ -6,7 +6,7 @@ module MailinatorClient
   #
   # User API for accessing Mailinator data
   class Client
-    #attr_reader :auth_token, :url
+    attr_reader :auth_token, :url
 
     def initialize(options = {})
       @auth_token = options.fetch(:auth_token, nil)

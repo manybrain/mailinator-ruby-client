@@ -1,4 +1,6 @@
 require "json"
+require "net/http"
+require "uri"
 
 module MailinatorClient
 
@@ -280,6 +282,135 @@ module MailinatorClient
         query: query_params,
         headers: headers,
         body: body)
+    end
+
+    # Streams all messages from a domain.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {boolean} full - [Optional] Return full email content with body/attachments (true) or just metadata (false). Default: false
+    # *  {number} limit - [Optional] Number of messages to fetch
+    # *  {number} throttleInterval - [Optional] Throttle interval in milliseconds
+    # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
+    #
+    # Responses:
+    # *  Message stream response
+    def stream_domain_messages(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+
+      query_params[:full] = params[:full] if params.has_key?(:full)
+      query_params[:limit] = params[:limit] if params.has_key?(:limit)
+      query_params[:throttleInterval] = params[:throttleInterval] if params.has_key?(:throttleInterval)
+      query_params[:delete] = params[:delete] if params.has_key?(:delete)
+
+      path = "/domains/#{params[:domain]}/stream"
+
+      uri = URI.parse(@client.url + path)
+      query = Utils.fix_query_arrays(query_params)
+      uri.query = URI.encode_www_form(query) unless query.nil? || query.empty?
+
+      headers["Accept"] = "application/json"
+      headers["Content-Type"] = "application/json"
+      headers["User-Agent"] = "Mailinator SDK - Ruby V#{MailinatorClient::VERSION}"
+      headers["Authorization"] = @client.auth_token if @client.auth_token
+
+      response_body = +""
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = uri.scheme == "https"
+      http.read_timeout = 20
+
+      request = Net::HTTP::Get.new(uri)
+      headers.each { |key, value| request[key] = value }
+
+      http.request(request) do |response|
+        if response.code.to_i >= 400
+          raise ResponseError.new(response.code.to_i, nil, response.body)
+        end
+
+        catch(:done) do
+          response.read_body do |chunk|
+            response_body << chunk
+            if response_body.include?("\n\n") || response_body.include?("}\n") || response_body.strip.end_with?("}")
+              throw :done
+            end
+          end
+        end
+      end
+
+      payload = response_body.strip
+      if payload.start_with?("data:")
+        payload_line = payload.lines.find { |line| line.start_with?("data:") }
+        payload = payload_line.to_s.sub(/^data:\\s*/, "").strip
+      end
+
+      parsed = begin
+        JSON.parse(payload)
+      rescue JSON::ParserError
+        cleaned = payload.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+        candidate = cleaned
+        if candidate.include?("data:")
+          data_line = candidate.lines.find { |line| line.start_with?("data:") }
+          candidate = data_line.to_s.sub(/^data:\s*/, "")
+        end
+
+        in_string = false
+        escape = false
+        depth = 0
+        start_idx = nil
+        end_idx = nil
+
+        candidate.each_char.with_index do |ch, idx|
+          if start_idx.nil?
+            if ch == "{"
+              start_idx = idx
+              depth = 1
+            end
+            next
+          end
+
+          if in_string
+            if escape
+              escape = false
+            elsif ch == "\\"
+              escape = true
+            elsif ch == "\""
+              in_string = false
+            end
+          else
+            case ch
+            when "\""
+              in_string = true
+            when "{"
+              depth += 1
+            when "}"
+              depth -= 1
+              if depth == 0
+                end_idx = idx
+                break
+              end
+            end
+          end
+        end
+
+        if start_idx && end_idx && end_idx >= start_idx
+          JSON.parse(candidate[start_idx..end_idx])
+        end
+      end
+
+      raise ResponseError.new(500, nil, payload) if parsed.nil?
+
+      return parsed if parsed.is_a?(Hash) && parsed.key?("domain") && parsed.key?("msgs")
+      return { "domain" => parsed["domain"], "to" => parsed["to"], "msgs" => [parsed] } if parsed.is_a?(Hash)
+      parsed
     end
 
     # Retrieves a specific SMS message by sms number.

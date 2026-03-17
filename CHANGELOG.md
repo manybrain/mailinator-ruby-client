@@ -14,6 +14,7 @@ and this project aims to follow [Semantic Versioning](https://semver.org/).
 - Added `messages.fetch_message_textplain` for `GET /api/v2/domains/{domain}/messages/{messageId}/textplain`.
 - Added `messages.fetch_message_texthtml` for `GET /api/v2/domains/{domain}/messages/{messageId}/texthtml`.
 - Added `messages.fetch_message_headers` for `GET /api/v2/domains/{domain}/messages/{messageId}/headers`.
+- Added `messages.stream_domain_messages` for `GET /api/v2/domains/{domain}/stream`.
 - Removed `wait` query parameter from `messages.fetch_sms_message` because the endpoint does not support it.
 - Removed `wait` query parameter from `messages.fetch_inbox`.
 - Fixed `webhooks.private_webhook` to include the webhook payload in the request body.

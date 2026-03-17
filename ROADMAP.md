@@ -23,14 +23,14 @@ Gap analysis source of truth: Mailinator OpenAPI spec (`version: 2026-03-04`) fr
 ### 1. Add Missing Spec Endpoints
 
 Messages (`lib/mailinator_client/messages.rb`):
-- [ ] Add `list_domain_messages` for `GET /domains/{domain}/inboxes`
 - [x] Add `fetch_message_summary` for `GET /domains/{domain}/messages/{messageId}/summary`
 - [x] Add `fetch_message_text` for `GET /domains/{domain}/messages/{messageId}/text`
 - [x] Add `fetch_message_text_plain` for `GET /domains/{domain}/messages/{messageId}/textplain`
 - [x] Add `fetch_message_text_html` for `GET /domains/{domain}/messages/{messageId}/texthtml`
 - [x] Add `fetch_message_headers` for `GET /domains/{domain}/messages/{messageId}/headers`
-- [ ] Add `stream_domain_messages` for `GET /domains/{domain}/stream`
+- [x] Add `stream_domain_messages` for `GET /domains/{domain}/stream`
 - [ ] Add `stream_inbox_messages` for `GET /domains/{domain}/stream/{inbox}`
+- [ ] Add `list_domain_messages` for `GET /domains/{domain}/inboxes`
 
 Webhooks (`lib/mailinator_client/webhooks.rb`):
 - [ ] Add domain-scoped webhook methods matching spec routes
@@ -38,7 +38,7 @@ Webhooks (`lib/mailinator_client/webhooks.rb`):
 
 ### 2. Test and Docs Follow-Through
 
-- [ ] Add unit tests for all new methods (path, HTTP verb, params)
+- [ ] Fix messages_api_test.rb. Split up into multiple files if needed to isolate new test cases and avoid timeouts. Assert on the body of the responses. 
 - [ ] Fix integration test bug: use `MAILINATOR_TEST_WEBHOOKTOKEN_CUSTOMSERVICE` for custom-service webhook tests
 - [ ] Add explicit assertions for custom-service webhook calls
 - [ ] Update README/docs links to current API reference and remove stale `manybrain.github.io/m8rdocs` links
