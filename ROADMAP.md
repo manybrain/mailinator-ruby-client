@@ -29,8 +29,10 @@ Messages (`lib/mailinator_client/messages.rb`):
 - [x] Add `fetch_message_text_html` for `GET /domains/{domain}/messages/{messageId}/texthtml`
 - [x] Add `fetch_message_headers` for `GET /domains/{domain}/messages/{messageId}/headers`
 - [x] Add `stream_domain_messages` for `GET /domains/{domain}/stream`
-- [ ] Add `stream_inbox_messages` for `GET /domains/{domain}/stream/{inbox}`
-- [ ] Add `list_domain_messages` for `GET /domains/{domain}/inboxes`
+- [x] Add `stream_inbox_messages` for `GET /domains/{domain}/stream/{inbox}`
+- [x] Add `list_domain_messages` for `GET /domains/{domain}/inboxes` (covered by `messages.fetch_inbox` with `inbox: "*"`)
+
+Note: We are intentionally not adding a separate SDK method for `GET /domains/{domain}/inboxes`. The existing `messages.fetch_inbox` with `inbox: "*"` provides equivalent domain-wide listing. Future gap analyses should treat this as covered.
 
 Webhooks (`lib/mailinator_client/webhooks.rb`):
 - [ ] Add domain-scoped webhook methods matching spec routes

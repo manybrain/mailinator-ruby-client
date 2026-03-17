@@ -15,11 +15,13 @@ and this project aims to follow [Semantic Versioning](https://semver.org/).
 - Added `messages.fetch_message_texthtml` for `GET /api/v2/domains/{domain}/messages/{messageId}/texthtml`.
 - Added `messages.fetch_message_headers` for `GET /api/v2/domains/{domain}/messages/{messageId}/headers`.
 - Added `messages.stream_domain_messages` for `GET /api/v2/domains/{domain}/stream`.
+- Added `messages.stream_inbox_messages` for `GET /api/v2/domains/{domain}/stream/{inbox}`.
 - Removed `wait` query parameter from `messages.fetch_sms_message` because the endpoint does not support it.
 - Removed `wait` query parameter from `messages.fetch_inbox`.
 - Fixed `webhooks.private_webhook` to include the webhook payload in the request body.
 - Debugging and test updates.
 - Made attachment download tests derive attachment IDs from the attachments list, removing the need for `MAILINATOR_TEST_ATTACHMENT_ID`.
+- Documented that `GET /domains/{domain}/inboxes` is covered by `messages.fetch_inbox` with `inbox: "*"`.
 
 ## [1.0.7]
 

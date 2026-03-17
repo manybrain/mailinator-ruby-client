@@ -116,6 +116,9 @@ Compare the base path used by each SDK method against the spec.
 #### D. Query parameter gaps
 For each existing SDK method, compare sent query parameters against the spec's declared parameters for that operation. List any missing parameters.
 
+#### Exception — Domain Listing
+The OpenAPI operation `GET /api/v2/domains/{domain}/inboxes` (list domain messages) is considered **covered** by `messages.fetch_inbox` when called with `inbox: "*"`. Do not treat this as a missing SDK method in future gap analyses.
+
 ### Step 4 — Build a Plan
 
 Before making any changes, write out a plan that includes:
