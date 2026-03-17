@@ -5,12 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project aims to follow [Semantic Versioning](https://semver.org/).
 
+## [1.1.0]
+
+### Changed
+
+- Added `messages.fetch_message_summary` for `GET /api/v2/domains/{domain}/messages/{messageId}/summary`.
+- Added `messages.fetch_message_text` for `GET /api/v2/domains/{domain}/messages/{messageId}/text`.
+- Added `messages.fetch_message_textplain` for `GET /api/v2/domains/{domain}/messages/{messageId}/textplain`.
+- Added `messages.fetch_message_texthtml` for `GET /api/v2/domains/{domain}/messages/{messageId}/texthtml`.
+- Added `messages.fetch_message_headers` for `GET /api/v2/domains/{domain}/messages/{messageId}/headers`.
+- Added `messages.stream_domain_messages` for `GET /api/v2/domains/{domain}/stream`.
+- Added `messages.stream_inbox_messages` for `GET /api/v2/domains/{domain}/stream/{inbox}`.
+- Removed `wait` query parameter from `messages.fetch_sms_message` because the endpoint does not support it.
+- Removed `wait` query parameter from `messages.fetch_inbox`.
+- Fixed `webhooks.private_webhook` to include the webhook payload in the request body.
+- Debugging and test updates.
+- Made attachment download tests derive attachment IDs from the attachments list, removing the need for `MAILINATOR_TEST_ATTACHMENT_ID`.
+- Documented that `GET /domains/{domain}/inboxes` is covered by `messages.fetch_inbox` with `inbox: "*"`.
+
 ## [1.0.7]
 
 ### Added
 
 - Optional `delete` query parameter support to `messages.fetch_inbox_message`.
-- Inbox-list query parameters to `messages.fetch_sms_message` (`skip`, `limit`, `sort`, `decode_subject`, `cursor`, `full`, `wait`, `delete`).
+- Inbox-list query parameters to `messages.fetch_sms_message` (`skip`, `limit`, `sort`, `decode_subject`, `cursor`, `full`, `delete`).
 - `.env.example` with Mailinator integration test variables.
 - Resource-scoped integration test files:
   - `test/authenticators_api_test.rb`

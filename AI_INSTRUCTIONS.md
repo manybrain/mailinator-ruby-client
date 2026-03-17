@@ -2,7 +2,7 @@
 
 This document explains the relationship between this Ruby client and the Mailinator OpenAPI specification.
 
-**OpenAPI Specification:** [https://github.com/manybrain/mailinatordocs/blob/main/openapi/mailinator-api.yaml](https://github.com/manybrain/mailinatordocs/blob/main/openapi/mailinator-api.yaml)
+**OpenAPI Specification:** [Found on GitHub](https://github.com/manybrain/mailinatordocs/blob/main/openapi/mailinator-api.yaml)
 
 ## Codebase Structure
 
@@ -85,7 +85,7 @@ Extract every `paths` entry. For each path, record:
 - The tag (maps to the SDK module directory)
 - All query parameters defined under `parameters`
 
-### Step 2 — Catalogue the SDK
+### Step 2 — Catalog the SDK
 
 For each resource file under `lib/mailinator_client/` (`messages.rb`, `domains.rb`, `rules.rb`, etc.):
 1. Enumerate every public method that issues `@client.request(...)`.
@@ -115,6 +115,9 @@ Compare the base path used by each SDK method against the spec.
 
 #### D. Query parameter gaps
 For each existing SDK method, compare sent query parameters against the spec's declared parameters for that operation. List any missing parameters.
+
+#### Exception — Domain Listing
+The OpenAPI operation `GET /api/v2/domains/{domain}/inboxes` (list domain messages) is considered **covered** by `messages.fetch_inbox` when called with `inbox: "*"`. Do not treat this as a missing SDK method in future gap analyses.
 
 ### Step 4 — Build a Plan
 
@@ -192,3 +195,11 @@ After implementing:
 | No-token requests | Supported by instantiating `Client` without `auth_token` (used by some webhook flows). |
 | Deprecation marker | Use Ruby/YARD style deprecation comments near method definitions and reflect in README/docs. |
 | Entrypoint loading | `lib/mailinator_client.rb` requires resource/support files and delegates module methods to singleton client. |
+
+### Test Expectations
+
+- Integration tests should exercise real HTTP requests to Mailinator endpoints. Do not use request-mocking tools (for example, `WebMock.stub_request`) for endpoint coverage tests.
+- Assertions must validate response semantics, not just existence. Prefer checking:
+  - expected HTTP success behavior (or explicit failure with returned status code),
+  - expected JSON shape (required keys),
+  - important field-level values (for example, IDs or arrays) relevant to the endpoint contract.

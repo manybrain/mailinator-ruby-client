@@ -2,53 +2,75 @@ require File.expand_path(File.dirname(__FILE__) + "/test_helper")
 
 class MessagesQueryParamsTest < Minitest::Test
   def test_fetch_inbox_message_accepts_optional_delete
-    client = MailinatorClient::Client.new(auth_token: "test-token")
-    request = stub_request(:get, "https://api.mailinator.com/api/v2/domains/private.example/inboxes/inbox/messages/msg-123")
-      .with(query: { "delete" => "10s" })
-      .to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json" })
-
-    response = client.messages.fetch_inbox_message(
-      domain: "private.example",
-      inbox: "inbox",
-      messageId: "msg-123",
-      delete: "10s"
+    require_env!(
+      "MAILINATOR_TEST_API_TOKEN",
+      "MAILINATOR_TEST_INBOX"
     )
 
-    assert_equal({}, response)
-    assert_requested(request, times: 1)
+    client = integration_client
+    domain_name = ENV["MAILINATOR_TEST_DOMAIN"].to_s.strip
+    domain_name = first_domain_name(client) if domain_name.empty?
+
+    message_to_post = {
+      subject: "Query param delete test",
+      from: "test_email_ruby@test.com",
+      text: "Delete param integration test"
+    }
+    post_response = client.messages.post_message(
+      domain: domain_name,
+      inbox: "*",
+      messageToPost: message_to_post
+    )
+    message_id = post_response["id"]
+    assert message_id != nil, "Expected posted message id to not be nil"
+
+    response = client.messages.fetch_inbox_message(
+      domain: domain_name,
+      inbox: "*",
+      messageId: message_id,
+      delete: "1m"
+    ) rescue begin
+      e = $!
+      if e.is_a?(MailinatorClient::ResponseError)
+        flunk "Expected HTTP 200 for fetch_inbox_message with delete param, got HTTP #{e.code}"
+      end
+      raise
+    end
+
+    assert_kind_of(Hash, response, "Expected JSON object response for fetch_inbox_message")
+    returned_id = response["id"] || response["mrid"]
+    assert returned_id != nil, "Expected message id in fetch_inbox_message response"
+    assert_equal(message_id, returned_id, "Expected returned message id to match requested message id")
   end
 
   def test_fetch_sms_message_supports_inbox_list_query_params
-    client = MailinatorClient::Client.new(auth_token: "test-token")
-    request = stub_request(:get, "https://api.mailinator.com/api/v2/domains/private.example/inboxes/15555550123")
-      .with(
-        query: {
-          "skip" => "5",
-          "limit" => "10",
-          "sort" => "descending",
-          "decode_subject" => "true",
-          "cursor" => "cursor-1",
-          "full" => "true",
-          "delete" => "30s",
-          "wait" => "20s"
-        }
-      )
-      .to_return(status: 200, body: "{\"msgs\":[]}", headers: { "Content-Type" => "application/json" })
+    require_env!(
+      "MAILINATOR_TEST_API_TOKEN",
+      "MAILINATOR_TEST_PHONE_NUMBER"
+    )
+
+    client = integration_client
+    domain_name = ENV["MAILINATOR_TEST_DOMAIN"].to_s.strip
+    domain_name = first_domain_name(client) if domain_name.empty?
 
     response = client.messages.fetch_sms_message(
-      domain: "private.example",
-      teamSmsNumber: "15555550123",
-      skip: 5,
+      domain: domain_name,
+      teamSmsNumber: ENV["MAILINATOR_TEST_PHONE_NUMBER"],
+      skip: 0,
       limit: 10,
       sort: "descending",
       decode_subject: true,
-      cursor: "cursor-1",
-      full: true,
-      delete: "30s",
-      wait: "20s"
-    )
+      full: false
+    ) rescue begin
+      e = $!
+      if e.is_a?(MailinatorClient::ResponseError)
+        flunk "Expected HTTP 200 for fetch_sms_message query params flow, got HTTP #{e.code}"
+      end
+      raise
+    end
 
-    assert_equal({ "msgs" => [] }, response)
-    assert_requested(request, times: 1)
+    assert_kind_of(Hash, response, "Expected JSON object response for fetch_sms_message")
+    assert response.key?("msgs"), "Expected msgs key in fetch_sms_message response"
+    assert_kind_of(Array, response["msgs"], "Expected msgs to be an array")
   end
 end

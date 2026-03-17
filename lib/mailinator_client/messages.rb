@@ -1,4 +1,6 @@
 require "json"
+require "net/http"
+require "uri"
 
 module MailinatorClient
 
@@ -16,7 +18,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {number} skip - [Optional] Skip this many emails in your Private Domain
     # *  {number} limit - [Optional] Number of emails to fetch from your Private Domain
@@ -25,7 +27,6 @@ module MailinatorClient
     # *  {string} cursor - [Optional] Pagination cursor for large result sets (obtained from previous response)
     # *  {boolean} full - [Optional] Return full email content with body/attachments (true) or just metadata (false). Default: false
     # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
-    # *  {string} wait - [Optional] Maximum time to wait for new messages (e.g., "30s" = 30 seconds)
     #
     # Responses:
     # *  Collection of messages (https://manybrain.github.io/m8rdocs/#fetch-inbox-aka-fetch-message-summaries)
@@ -45,16 +46,17 @@ module MailinatorClient
       query_params[:cursor] = params[:cursor] if params.has_key?(:cursor)
       query_params[:full] = params[:full] if params.has_key?(:full)
       query_params[:delete] = params[:delete] if params.has_key?(:delete)
-      query_params[:wait] = params[:wait] if params.has_key?(:wait)
 
       path = "/domains/#{params[:domain]}/inboxes/#{params[:inbox]}"
 
-      @client.request(
+      response = @client.request(
         method: :get,
         path: path,
         query: query_params,
         headers: headers,
         body: body)
+
+      response
     end
 
     # Retrieves a specific message by id for specific inbox.
@@ -64,7 +66,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
@@ -100,12 +102,12 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
     #
     # Responses:
-    # *  Message (https://manybrain.github.io/m8rdocs/#fetch-message)
+    # *  Message (https://www.mailinator.com/documentation/docs/api/get-domain-message/index.html)
     def fetch_message(params = {})
       params = Utils.symbolize_hash_keys(params)
       query_params = { }
@@ -127,6 +129,421 @@ module MailinatorClient
         body: body)
     end
 
+    # Retrieves the summary for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message summary
+    def fetch_message_summary(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/summary"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves text content for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message text response
+    def fetch_message_text(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/text"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves text/plain content for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message text/plain response
+    def fetch_message_textplain(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/textplain"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves text/html content for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message text/html response
+    def fetch_message_texthtml(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/texthtml"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Retrieves headers for a specific message by id.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} messageId - The Message id
+    #
+    # Responses:
+    # *  Message headers response
+    def fetch_message_headers(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("message id is required") unless params.has_key?(:messageId)
+
+      path = "/domains/#{params[:domain]}/messages/#{params[:messageId]}/headers"
+
+      @client.request(
+        method: :get,
+        path: path,
+        query: query_params,
+        headers: headers,
+        body: body)
+    end
+
+    # Streams all messages from a domain.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {boolean} full - [Optional] Return full email content with body/attachments (true) or just metadata (false). Default: false
+    # *  {number} limit - [Optional] Number of messages to fetch
+    # *  {number} throttleInterval - [Optional] Throttle interval in milliseconds
+    # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
+    #
+    # Responses:
+    # *  Message stream response
+    def stream_domain_messages(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+
+      query_params[:full] = params[:full] if params.has_key?(:full)
+      query_params[:limit] = params[:limit] if params.has_key?(:limit)
+      query_params[:throttleInterval] = params[:throttleInterval] if params.has_key?(:throttleInterval)
+      query_params[:delete] = params[:delete] if params.has_key?(:delete)
+
+      path = "/domains/#{params[:domain]}/stream"
+
+      uri = URI.parse(@client.url + path)
+      query = Utils.fix_query_arrays(query_params)
+      uri.query = URI.encode_www_form(query) unless query.nil? || query.empty?
+
+      headers["Accept"] = "application/json"
+      headers["Content-Type"] = "application/json"
+      headers["User-Agent"] = "Mailinator SDK - Ruby V#{MailinatorClient::VERSION}"
+      headers["Authorization"] = @client.auth_token if @client.auth_token
+
+      response_body = +""
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = uri.scheme == "https"
+      http.read_timeout = 20
+
+      request = Net::HTTP::Get.new(uri)
+      headers.each { |key, value| request[key] = value }
+
+      http.request(request) do |response|
+        if response.code.to_i >= 400
+          raise ResponseError.new(response.code.to_i, nil, response.body)
+        end
+
+        catch(:done) do
+          response.read_body do |chunk|
+            response_body << chunk
+            if response_body.include?("\n\n") || response_body.include?("}\n") || response_body.strip.end_with?("}")
+              throw :done
+            end
+          end
+        end
+      end
+
+      payload = response_body.strip
+      if payload.start_with?("data:")
+        payload_line = payload.lines.find { |line| line.start_with?("data:") }
+        payload = payload_line.to_s.sub(/^data:\\s*/, "").strip
+      end
+
+      parsed = begin
+        JSON.parse(payload)
+      rescue JSON::ParserError
+        cleaned = payload.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+        candidate = cleaned
+        if candidate.include?("data:")
+          data_line = candidate.lines.find { |line| line.start_with?("data:") }
+          candidate = data_line.to_s.sub(/^data:\s*/, "")
+        end
+
+        in_string = false
+        escape = false
+        depth = 0
+        start_idx = nil
+        end_idx = nil
+
+        candidate.each_char.with_index do |ch, idx|
+          if start_idx.nil?
+            if ch == "{"
+              start_idx = idx
+              depth = 1
+            end
+            next
+          end
+
+          if in_string
+            if escape
+              escape = false
+            elsif ch == "\\"
+              escape = true
+            elsif ch == "\""
+              in_string = false
+            end
+          else
+            case ch
+            when "\""
+              in_string = true
+            when "{"
+              depth += 1
+            when "}"
+              depth -= 1
+              if depth == 0
+                end_idx = idx
+                break
+              end
+            end
+          end
+        end
+
+        if start_idx && end_idx && end_idx >= start_idx
+          JSON.parse(candidate[start_idx..end_idx])
+        end
+      end
+
+      raise ResponseError.new(500, nil, payload) if parsed.nil?
+
+      return parsed if parsed.is_a?(Hash) && parsed.key?("domain") && parsed.key?("msgs")
+      return { "domain" => parsed["domain"], "to" => parsed["to"], "msgs" => [parsed] } if parsed.is_a?(Hash)
+      parsed
+    end
+
+    # Streams all messages from an inbox.
+    #
+    # Authentication:
+    # The client must be configured with a valid api
+    # access token to call this action.
+    #
+    # Parameters:
+    # *  {string} domainId - The Domain name or simply 'private'
+    # *  {string} inbox - The Inbox name
+    # *  {boolean} full - [Optional] Return full email content with body/attachments (true) or just metadata (false). Default: false
+    # *  {number} limit - [Optional] Number of messages to fetch
+    # *  {number} throttleInterval - [Optional] Throttle interval in milliseconds
+    # *  {string} delete - [Optional] Auto-delete message after retrieval (e.g., "10s" = 10 seconds, "5m" = 5 minutes)
+    #
+    # Responses:
+    # *  Message stream response
+    def stream_inbox_messages(params = {})
+      params = Utils.symbolize_hash_keys(params)
+      query_params = { }
+      headers = {}
+      body = nil
+
+      raise ArgumentError.new("domain is required") unless params.has_key?(:domain)
+      raise ArgumentError.new("inbox is required") unless params.has_key?(:inbox)
+
+      query_params[:full] = params[:full] if params.has_key?(:full)
+      query_params[:limit] = params[:limit] if params.has_key?(:limit)
+      query_params[:throttleInterval] = params[:throttleInterval] if params.has_key?(:throttleInterval)
+      query_params[:delete] = params[:delete] if params.has_key?(:delete)
+
+      path = "/domains/#{params[:domain]}/stream/#{params[:inbox]}"
+
+      uri = URI.parse(@client.url + path)
+      query = Utils.fix_query_arrays(query_params)
+      uri.query = URI.encode_www_form(query) unless query.nil? || query.empty?
+
+      headers["Accept"] = "application/json"
+      headers["Content-Type"] = "application/json"
+      headers["User-Agent"] = "Mailinator SDK - Ruby V#{MailinatorClient::VERSION}"
+      headers["Authorization"] = @client.auth_token if @client.auth_token
+
+      response_body = +""
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = uri.scheme == "https"
+      http.read_timeout = 20
+
+      request = Net::HTTP::Get.new(uri)
+      headers.each { |key, value| request[key] = value }
+
+      http.request(request) do |response|
+        if response.code.to_i >= 400
+          raise ResponseError.new(response.code.to_i, nil, response.body)
+        end
+
+        catch(:done) do
+          response.read_body do |chunk|
+            response_body << chunk
+            if response_body.include?("\n\n") || response_body.include?("}\n") || response_body.strip.end_with?("}")
+              throw :done
+            end
+          end
+        end
+      end
+
+      payload = response_body.strip
+      if payload.start_with?("data:")
+        payload_line = payload.lines.find { |line| line.start_with?("data:") }
+        payload = payload_line.to_s.sub(/^data:\\s*/, "").strip
+      end
+
+      parsed = begin
+        JSON.parse(payload)
+      rescue JSON::ParserError
+        cleaned = payload.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+        candidate = cleaned
+        if candidate.include?("data:")
+          data_line = candidate.lines.find { |line| line.start_with?("data:") }
+          candidate = data_line.to_s.sub(/^data:\s*/, "")
+        end
+
+        in_string = false
+        escape = false
+        depth = 0
+        start_idx = nil
+        end_idx = nil
+
+        candidate.each_char.with_index do |ch, idx|
+          if start_idx.nil?
+            if ch == "{"
+              start_idx = idx
+              depth = 1
+            end
+            next
+          end
+
+          if in_string
+            if escape
+              escape = false
+            elsif ch == "\\"
+              escape = true
+            elsif ch == "\""
+              in_string = false
+            end
+          else
+            case ch
+            when "\""
+              in_string = true
+            when "{"
+              depth += 1
+            when "}"
+              depth -= 1
+              if depth == 0
+                end_idx = idx
+                break
+              end
+            end
+          end
+        end
+
+        if start_idx && end_idx && end_idx >= start_idx
+          JSON.parse(candidate[start_idx..end_idx])
+        end
+      end
+
+      raise ResponseError.new(500, nil, payload) if parsed.nil?
+
+      return parsed if parsed.is_a?(Hash) && parsed.key?("domain") && parsed.key?("msgs")
+      return { "domain" => parsed["domain"], "to" => parsed["to"], "msgs" => [parsed] } if parsed.is_a?(Hash)
+      parsed
+    end
+
     # Retrieves a specific SMS message by sms number.
     #
     # Authentication:
@@ -134,7 +551,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} teamSmsNumber - The Team sms number
     # *  {number} skip - [Optional] Skip this many emails in your Private Domain
     # *  {number} limit - [Optional] Number of emails to fetch from your Private Domain
@@ -183,7 +600,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -216,7 +633,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -247,7 +664,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     # *  {string} attachmentId - The Attachment id
@@ -282,7 +699,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     # *  {string} attachmentId - The Attachment id
     #
@@ -315,7 +732,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -346,7 +763,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -377,7 +794,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -410,7 +827,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     #
     # Responses:
     # *  Status and count of removed messages (https://manybrain.github.io/m8rdocs/#delete-all-messages-by-domain)
@@ -439,7 +856,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     #
     # Responses:
@@ -470,7 +887,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -503,7 +920,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageToPost - The Message object (https://manybrain.github.io/m8rdocs/#inject-a-message-http-post-messages)
     #
@@ -538,7 +955,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -569,7 +986,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -602,7 +1019,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} messageId - The Message id
     #
     # Responses:
@@ -633,7 +1050,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     # *  {string} messageId - The Message id
     #
@@ -666,7 +1083,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     #
     # Responses:
     # *  Collection of latest messages (https://manybrain.github.io/m8rdocs/#fetch-latest-messages)
@@ -695,7 +1112,7 @@ module MailinatorClient
     # access token to call this action.
     #
     # Parameters:
-    # *  {string} domainId - The Domain name or the Domain id
+    # *  {string} domainId - The Domain name or simply 'private'
     # *  {string} inbox - The Inbox name
     #
     # Responses:

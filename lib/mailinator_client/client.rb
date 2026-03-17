@@ -6,7 +6,7 @@ module MailinatorClient
   #
   # User API for accessing Mailinator data
   class Client
-    #attr_reader :auth_token, :url
+    attr_reader :auth_token, :url
 
     def initialize(options = {})
       @auth_token = options.fetch(:auth_token, nil)
@@ -47,12 +47,24 @@ module MailinatorClient
       headers["Authorization"]  = @auth_token if @auth_token
       path = @url + options.fetch(:path, "")
 
+      debug_request = ENV["MAILINATOR_DEBUG_REQUESTS"].to_s.strip.downcase
+      if debug_request == "1" || debug_request == "true"
+        warn "[mailinator] #{method.to_s.upcase} #{path}"
+        warn "[mailinator] headers=#{headers}"
+        warn "[mailinator] query=#{Utils.fix_query_arrays(options[:query])}"
+      end
+
       response = HTTParty.send(method, path,
         query: Utils.fix_query_arrays(options[:query]),
         body: options[:body] && options[:body].to_json(),
         headers: headers,
         timeout: 125
       )
+
+      if debug_request == "1" || debug_request == "true"
+        warn "[mailinator] response_code=#{response.code}"
+        warn "[mailinator] response_body=#{response.body}"
+      end
 
       result = response.parsed_response
       if response.code >= 400
