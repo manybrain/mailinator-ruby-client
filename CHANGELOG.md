@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project aims to follow [Semantic Versioning](https://semver.org/).
 
+## [1.1.1]
+
+### Security
+
+- Updated `httparty` to `>= 0.24, < 0.25` to address the SSRF and API-key leakage vulnerability in CVE-2025-68696.
+- Required `addressable >= 2.9, < 3.0` for development to address the URI-template ReDoS vulnerability in CVE-2026-35611.
+
+### Changed
+
+- Raised the minimum supported Ruby version from 2.1 to 2.7, matching the requirement of the fixed `httparty` release line.
+- Updated development dependency floors for `minitest`, `rake`, and `webmock`.
+
 ## [1.1.0]
 
 ### Changed
