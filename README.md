@@ -90,19 +90,19 @@ When the Mailinator API returns a unsuccessful response, an instance of Response
 
 ## Testing
 
-Run individual integration tests with real API Key.
+Run an individual integration test with a real API key:
 
 ```ruby
-ruby -I test test/mailinator_client_api_test.rb
+bundle exec ruby -Itest test/messages_api_test.rb
 ```
 
-OR run them all:
+Or run the full test suite:
 
 ```ruby
 bundle exec rake test
 ```
 
-Most of the tests require env variables with valid values. Visit tests source code and review `mailinator_client_api_test.rb` file. The more env variables you set, the more tests are run.
+Most integration tests require environment variables with valid values. Review the files under `test/` and `.env.example`; the tests whose required variables are unavailable will be skipped.
 
 * `MAILINATOR_TEST_API_TOKEN` - API tokens for authentication; basic requirement across many tests;see also https://manybrain.github.io/m8rdocs/#api-authentication
 * `MAILINATOR_TEST_INBOX` - some already existing inbox within the private domain

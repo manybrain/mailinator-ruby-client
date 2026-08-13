@@ -1,9 +1,17 @@
-All AI agents (Codex, Copilot, Antigravity) must adhere to the rules defined in .agent/rules/ and this file.
+All AI agents (Codex, Copilot, Antigravity) must follow this file and the rules in `.agent/rules/`.
 
-# Project Standards & Agent Behavior
+# Project Standards and Agent Behavior
 
-- **Primary Workflow:** We use the `tdd-flow` skill for all new feature development.
-- **Test Style:** Focus on behavior-driven assertions. No mocking.
-- **Anti-Pattern Guardrail:** Do not "hallucinate" implementation for skipped tests. If a test is ignored, the underlying code must remain untouched.
-- **Language/Framework:** Ruby with RSpec for testing.
-- **Spec-Strictness:** When generating tests for the SDK, only assert properties explicitly defined in the OpenAPI specification provided. Do not invent "common sense" validations that are not codified in the schema. Call out any ambiguities or gaps in the spec for human review instead of making assumptions.
+- **Language and tests:** This is a Ruby SDK tested with Minitest.
+- **Primary workflow:** Use the `.agent/tdd-flow` skill for feature implementation and bug fixes, subject to `.agent/rules/tdd.md`.
+- **Test style:** Write behavior-driven assertions. Endpoint integration tests must use real HTTP requests; do not mock them.
+- **Skipped tests:** Never infer or change implementation for a skipped test. Leave the underlying code untouched.
+- **OpenAPI source of truth:** Use the [Mailinator OpenAPI specification](https://raw.githubusercontent.com/manybrain/mailinatordocs/main/openapi/mailinator-api.yaml).
+- **Spec strictness:** Only assert behavior and properties explicitly defined by the OpenAPI specification. Do not invent validations. Flag ambiguities or gaps for human review.
+- **Request paths:** Resource wrappers use paths relative to `https://api.mailinator.com/api/v2`; do not include `/api/v2` or `/v2` in resource method paths.
+- **Gap-analysis changes:** Follow `docs/openapi-maintenance.md`. Present the implementation plan and wait for approval before changing SDK coverage.
+
+# Project References
+
+- `docs/openapi-maintenance.md` documents the SDK architecture, conventions, and OpenAPI gap-analysis workflow.
+- `ROADMAP.md` tracks known gaps and planned improvements.
