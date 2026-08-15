@@ -30,7 +30,7 @@ Webhooks (`lib/mailinator_client/webhooks.rb`):
 
 ## Completed (Phase 1)
 
-- [x] Add structural docs (`ROADMAP.md`, `CHANGELOG.md`, `AI_INSTRUCTIONS.md`, `EXAMPLES.md`)
+- [x] Add structural docs (`ROADMAP.md`, `CHANGELOG.md`, `docs/openapi-maintenance.md`, `EXAMPLES.md`)
 - [x] Update outdated dependencies (`rake` and `webmock`; `httparty` pinned to latest Ruby 2.6-compatible range)
 - [x] Update version number (`1.0.7`)
 - [x] Publish those changes (minor release)

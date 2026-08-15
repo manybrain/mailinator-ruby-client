@@ -15,11 +15,12 @@ Gem::Specification.new do |gem|
   gem.version       = MailinatorClient::VERSION
   gem.licenses      = ["MIT"]
 
-  gem.required_ruby_version = ">= 2.1"
+  gem.required_ruby_version = ">= 2.7"
 
-  gem.add_dependency "httparty", ">= 0.21", "< 0.22"
+  gem.add_dependency "httparty", ">= 0.24", "< 0.25"
 
-  gem.add_development_dependency "minitest", ">= 5.25", "< 7.0"
-  gem.add_development_dependency "rake", ">= 13.0", "< 14.0"
-  gem.add_development_dependency "webmock", ">= 3.26", "< 4.0"
+  gem.add_development_dependency "addressable", ">= 2.9", "< 3.0"
+  gem.add_development_dependency "minitest", ">= 5.26", "< 6.0"
+  gem.add_development_dependency "rake", ">= 13.4", "< 14.0"
+  gem.add_development_dependency "webmock", ">= 3.26.2", "< 4.0"
 end
